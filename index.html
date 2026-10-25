@@ -51,6 +51,7 @@
     .angle-row{display:flex;gap:5px;min-width:0}.angle-row .input-wrap{flex:1;min-width:0}.picks{display:flex;gap:4px}.picks button{border-radius:7px;border:1px solid var(--border);padding:0 7px;color:var(--sub);background:var(--chip-bg);font-size:11px}.picks button.active{background:var(--mint-soft);border-color:var(--mint-line);color:var(--mint-ink)}.picks button:hover{border-color:var(--mint)}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.swap{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:transparent;color:var(--sub);border-radius:8px;padding:8px 11px;margin-top:11px;font-size:12px}.swap:hover{border-color:var(--mint);color:var(--mint-ink)}
     .placement{display:flex;align-items:center;gap:9px;margin:0 0 15px;color:var(--sub);font-size:12px;line-height:1.35}.pill{flex:none;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;background:var(--mint-soft);color:var(--mint-ink);border:1px solid var(--mint-line)}.pill.manual{background:var(--chip-bg);color:var(--sub);border-color:var(--border)}
+    .seg{display:flex;gap:6px;margin:0 0 15px}.seg button{flex:1;border-radius:8px;border:1px solid var(--border);padding:9px 6px;color:var(--sub);background:var(--chip-bg);font-size:12px;font-weight:600}.seg button.active{background:var(--mint-soft);border-color:var(--mint-line);color:var(--mint-ink)}.seg button:hover{border-color:var(--mint)}.ranger:disabled{opacity:.45}
     .range-title{display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-size:13px;margin:0 0 10px}.range-title strong{color:var(--text);font-size:12px;font-weight:650}.ranger{width:100%;margin:0 0 15px;accent-color:var(--mint-ink)}.range-scale{display:flex;justify-content:space-between;margin-top:-13px;margin-bottom:10px;color:var(--muted);font-size:10px}
     .primary{width:100%;border:1px solid var(--mint);border-radius:10px;background:var(--mint);color:var(--on-mint);font-weight:760;padding:12px 14px;display:flex;justify-content:center;align-items:center;gap:9px}.primary:hover{background:var(--mint-hover)}.primary:disabled,.primary:disabled:hover{opacity:.6;cursor:default;background:var(--mint)}.helper{font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.55}
     .right{min-width:0}.stats{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px}.stat{padding:17px 18px;min-width:0;min-height:106px;background:linear-gradient(150deg,var(--stat-a),var(--stat-b));border:1px solid var(--border-soft);border-radius:14px}.stat.mainstat{border-color:var(--main-border);background:linear-gradient(125deg,var(--main-a),var(--main-b))}.stat .label{font-size:11px;font-weight:680;color:var(--muted);text-transform:uppercase;letter-spacing:.075em;white-space:nowrap}.stat .number{font-size:clamp(20px,2.35vw,32px);letter-spacing:-.8px;font-weight:750;line-height:1.15;margin:12px 0 3px;white-space:nowrap}.stat.mainstat .number{color:var(--mint-ink)}.stat .desc{color:var(--muted);font-size:11px;white-space:nowrap}
@@ -91,12 +92,13 @@
         <div class="field"><label class="fieldlabel" for="scribe">Scribe street width <small>between neighboring dies</small></label><div class="input-wrap"><input id="scribe" type="number" min="0" max="50" step="0.05" value="0.15"><span class="unit">mm</span></div></div>
         <button class="swap" id="swapBtn" type="button" title="Rotate all dies 90 degrees">⇄ &nbsp;Swap die orientation</button>
       </section>
-      <section class="section" aria-labelledby="alignSection"><h3 class="section-title" id="alignSection">03 / Grid placement</h3>
+      <section class="section" aria-labelledby="alignSection"><h3 class="section-title" id="alignSection">03 / Dicing layout</h3>
+        <div class="seg" role="group" aria-label="Dicing layout"><button type="button" data-layout="grid" class="active" aria-pressed="true">Grid · saw</button><button type="button" data-layout="stagger" aria-pressed="false">Staggered · plasma</button></div>
         <div class="placement" aria-live="polite"><span class="pill" id="placeMode">Optimal</span><span id="placeText">Finding the exact optimum…</span></div>
         <div class="range-title"><label for="offsetX">Horizontal offset</label><strong id="offsetXval">0 mm</strong></div><input class="ranger" id="offsetX" type="range" min="-50" max="50" step="0.1" value="0" aria-label="Horizontal grid offset"><div class="range-scale"><span>−½ pitch</span><span>Center</span><span>+½ pitch</span></div>
         <div class="range-title"><label for="offsetY">Vertical offset</label><strong id="offsetYval">0 mm</strong></div><input class="ranger" id="offsetY" type="range" min="-50" max="50" step="0.1" value="0" aria-label="Vertical grid offset"><div class="range-scale"><span>−½ pitch</span><span>Center</span><span>+½ pitch</span></div>
         <button class="primary" id="optimalBtn" type="button" disabled>✓ Optimal placement</button>
-        <p class="helper">The optimum is exact, not sampled: every grid position where a pair of dies touches the usable edge is checked. Moving a slider switches to manual placement.</p>
+        <p class="helper" id="placeHelp">The optimum is exact, not sampled: every grid position where a pair of dies touches the usable edge is checked. Moving a slider switches to manual placement.</p>
       </section>
     </aside>
     <section class="right" aria-label="Calculated results and wafer map">
@@ -112,7 +114,7 @@
         <div class="map-footer"><div class="status" id="mapStatus">All complete dies shown</div><div class="exports"><button class="export" type="button" id="pngBtn" title="Save the current wafer map as a PNG image">↓ PNG</button><button class="export" type="button" id="csvBtn" title="Export positions of all counted dies">↓ Die CSV</button></div></div>
       </div>
       <div class="insights"><div class="insight"><div class="key">Single die area</div><div class="value" id="dieArea">—</div></div><div class="insight"><div class="key">Usable wafer area</div><div class="value" id="usableArea">—</div></div><div class="insight"><div class="key">Area-only die estimate</div><div class="value" id="estimate">—</div></div></div>
-      <p class="fineprint">Method: a die counts when all four corners lie inside the usable area, which is the wafer outline (circle and any flats) moved inward by the edge exclusion. Dies sit on a regular grid aligned with the major flat, with scribe streets between them. The optimal placement is exact rather than sampled: an optimal grid can always be slid down and then left until one die, or a pair of dies, meets the edge of the usable area. That area is convex, flats included, so checking the lowest-left position of every die pair finds an optimum, to within 10⁻⁸ mm. The area-only estimate is usable area divided by pitch area, not an exact packing limit.</p>
+      <p class="fineprint">Method: a die counts when all four corners lie inside the usable area, which is the wafer outline (circle and any flats) moved inward by the edge exclusion. Dies sit on one regular grid aligned with the major flat, with straight X and Y streets running across the whole wafer, as a dicing saw cuts them. The staggered option models plasma dicing: streets run straight in one direction only and each row (or column) is placed on its own, with the shared offset chosen exactly. The optimal placement is exact rather than sampled: an optimal grid can always be slid down and then left until one die, or a pair of dies, meets the edge of the usable area. That area is convex, flats included, so checking the lowest-left position of every die pair finds an optimum, to within 10⁻⁸ mm. The area-only estimate is usable area divided by pitch area, not an exact packing limit.</p>
     </section>
   </main>
   <footer class="foot"><span>Made with AI tools.</span><span>Dedicated to the public domain under <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="license">CC0 1.0</a> — do whatever you want with it.</span></footer>
@@ -134,7 +136,7 @@
   let lastConfig, lastLayout, drawParams, toastTimer;
   const EPS = 1e-8;      // a die counts when it lies inside the usable area to within this many mm
   const EPS_GEN = 1e-9;  // tighter tolerance for generating candidate offsets, so rounding cannot lose a die
-  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0};
+  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false};
   let LO = 0, HI = 0;    // die-centre limits set by lim()
 
   function num(id, fallback, min, max) {
@@ -185,11 +187,13 @@
       const cy = oy+j*c.py;
       if (!lim(c, cy, 0, EPS)) continue;
       const minK = Math.ceil((LO-EPS-ox)/c.px), maxK = Math.floor((HI+EPS-ox)/c.px);
-      if (maxK >= minK) {count += maxK-minK+1; if (rows) rows.push({j,cy,minK,maxK});}
+      if (maxK >= minK) {count += maxK-minK+1; if (rows) rows.push({j, t:cy, s:ox+minK*c.px, n:maxK-minK+1, k0:minK});}
     }
     return count;
   }
-  function layoutFor(c) { const rows = []; return {count:countAt(c, c.ox, c.oy, rows), rows}; }
+  // A layout is a list of lines: rows, or columns when axis is 1. Line j at position t holds n dies centred at
+  // s, s+pitch, ... along it; k0 is the grid column of its first die (0 for staggered lines).
+  function layoutFor(c) { const lines = []; return {count:countAt(c, c.ox, c.oy, lines), axis:0, staggered:false, lines}; }
   function toast(s) {clearTimeout(toastTimer);$('toast').textContent=s;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2800);}
 
   // Smallest x in [a, b] where the convex function f is <= 0, or NaN if there is none.
@@ -266,9 +270,37 @@
     return {count:base+most, at:wrap(at, p)};
   }
 
-  // Exact optimum. An optimal grid can be slid down, then left, until one die or a pair of dies is stopped by
-  // the edge of the convex usable area (Helly's theorem in the plane). So some optimum is the lowest-leftmost
-  // position of a die pair, which gives one candidate offset per grid vector between the two dies.
+  /* Why the search below finds the true optimum.
+
+     The whole die grid shifts by one offset t = (ox, oy). For any single die of the grid, the offsets at which
+     that die fits form a "window" in the (ox, oy) plane: the usable area, shrunk by the die and shifted by the
+     die's grid position. The usable area is a circle with straight flats, moved inward by the edge exclusion, so it
+     is convex (no dents). A die fits exactly when its four corners do, and every window is convex as well.
+
+     1. Slide. Take a best offset and its set S of dies. Anywhere in the overlap of their windows all of S still
+        fits, so slide the grid down as far as that overlap allows, then left. The jammed offset is still a best one.
+     2. Two contacts are enough. Helly's theorem: if every three of a finite set of convex regions in the plane
+        share a point, then all of them share a point. The windows of S plus the region "lower than the jammed
+        offset, or level with it and further left" share no point, so already three of them share none, and one of
+        the three must be that region. So two dies of S alone jam the grid at the same place. This is the same
+        reason a 2-D linear program's optimum sits where two constraints meet: a sliding grid has two degrees of
+        freedom, so two contacts can stop it.
+     3. Enumerate. A pair of grid dies is fixed by the grid vector between them, (kx*px, ky*py). For each vector,
+        find the lowest, then leftmost, offset at which both dies fit, and count all dies there. The best of these
+        counts is the optimum. The vector -v gives the same offset as v, so ky >= 0 suffices, and pairs too far
+        apart to fit are skipped, which leaves two or three candidates per die.
+     4. Solve each pair. The gap between the two dies' allowed x-ranges is a convex function of height, so a
+        golden-section search followed by bisection finds the first height where both fit. Pairs whose lowest
+        position is the lowest possible row are all covered by one exact sweep along that row.
+
+     Flats keep the usable area convex, so they change nothing above. A dent, such as a notch or a keep-out zone
+     inside the wafer, would break step 2.
+     Tolerance: a die counts if it fits to within EPS; candidates use the tighter EPS_GEN, so rounding cannot lose one.
+     Model: one regular grid whose X and Y streets run straight across the whole wafer, as a dicing saw cuts them.
+     For a round wafer or the SEMI flat positions, each row's usable stretch lies inside that of any row nearer the
+     middle, and likewise for columns. Closing up a wider-than-needed street therefore never loses a die, so uneven
+     street spacing cannot beat this grid. The staggered option for plasma dicing, where each row or column slides
+     on its own, is solved separately by staggerAlong() below. */
   function* optimise(c) {
     const best = {count:-1, ox:0, oy:0, tried:0};
     const take = (ox, oy) => {
@@ -317,6 +349,57 @@
       recalc();
     })();
   }
+
+  // Staggered layout (plasma dicing): streets in one direction stay straight, but each line of dies along them
+  // (a row, or a column for axis 1) is placed on its own. A line whose usable stretch is len then holds
+  // floor(len/pitch)+1 dies wherever it sits, so only the shared offset o across the lines is left to choose.
+  // The total only changes when some line passes a position where its stretch is a whole number of pitches, so
+  // those positions, taken modulo the line spacing, are the only candidates. The stretch is concave in the line
+  // position, so each whole number gives at most two such positions, found by bisection.
+  function staggerAlong(c, axis) {
+    const p = axis ? c.py : c.px, q = axis ? c.px : c.py, across = axis ? c.w : c.h, top = c.R-across/2;
+    let a = -top, b = top;
+    for (const f of c.cuts) {   // flats parallel to the lines bound their positions directly (|nb| = 1)
+      const na = axis ? f.ny : f.nx, nb = axis ? f.nx : f.ny;
+      if (na === 0) { const t = (f.d+EPS_GEN-across/2)/nb; if (nb > 0) b = Math.min(b, t); else a = Math.max(a, t); }
+    }
+    const len = t => (lim(c, t, axis, Infinity), HI-LO+2*EPS_GEN);
+    const total = (o, lines) => {   // dies on all lines at offset o, at the counting tolerance; optionally lay them out
+      let n = 0;
+      for (let j = Math.ceil((-top-EPS-o)/q), last = Math.floor((top+EPS-o)/q); j <= last; j++) {
+        const t = o+j*q;
+        if (!lim(c, t, axis, EPS) || HI-LO < -2*EPS) continue;
+        const k = Math.floor((HI-LO+2*EPS)/p)+1;
+        n += k;
+        if (lines) lines.push({j, t, s:(LO+HI-(k-1)*p)/2, n:k, k0:0});   // centred in the usable stretch
+      }
+      return n;
+    };
+    const low = firstFeasible(t => -len(t), a, b), lay = {count:0, axis, staggered:true, o:0, lines:[]};
+    if (Number.isNaN(low)) return lay;
+    const high = lastFeasible(t => -len(t), low, b), G = 0.6180339887498949;
+    let u = low, v = high;   // golden-section search for the longest line
+    for (let i = 0; i < 200 && v-u > 1e-12; i++) { const x1 = v-G*(v-u), x2 = u+G*(v-u); if (len(x1) < len(x2)) u = x1; else v = x2; }
+    const mid = (u+v)/2, marks = [low, high, mid];
+    for (let m = 1; m*p <= len(mid); m++) marks.push(firstFeasible(t => m*p-len(t), low, mid), lastFeasible(t => m*p-len(t), mid, high));
+    // The count is constant inside each open gap between neighbouring candidates, so check both.
+    const P = [...new Set(marks.map(t => t-Math.floor(t/q)*q))].sort((x, y) => x-y), n = P.length;
+    const end = i => i+1 < n ? P[i+1] : P[0]+q;
+    const at = P.map(o => total(o)), gap = P.map((o, i) => total((o+end(i))/2));
+    const most = [...at, ...gap].reduce((m, v) => v > m ? v : m, 0), first = gap.findIndex(g => g !== most);
+    let o = P[at.indexOf(most)], width = -1;
+    if (first < 0) o = (P[0]+end(0))/2;
+    else if (gap.includes(most))   // take the middle of the widest run of best gaps, for margin
+      for (let i = 1, pos = P[(first+1)%n], run = null; i <= n; i++) {
+        const g = (first+i)%n;
+        if (gap[g] === most) { if (run === null) run = pos; }
+        else if (run !== null) { if (pos-run > width) {width = pos-run; o = run+width/2;} run = null; }
+        pos += end(g)-P[g];
+      }
+    lay.count = total(o, lay.lines); lay.o = wrap(o, q);
+    return lay;
+  }
+  const staggered = c => { const r = staggerAlong(c, 0), k = staggerAlong(c, 1); return k.count > r.count ? k : r; };
 
   // Disk of radius R cut by flats: boundary pieces in counter-clockwise order, and the exact area
   // (Green's theorem: each arc adds R²·angle/2, each straight edge adds d·length/2). Null when empty.
@@ -385,15 +468,19 @@
       + 'The minor-flat angle is clockwise from the major flat, seen from the front; its mirror image gives the same count.';
   }
   function showPlacement() {
-    const c = lastConfig, l = lastLayout, opt = c.opt, manual = !place.auto;
-    $('placeMode').textContent = manual ? 'Manual' : opt ? 'Optimal' : 'Searching';
+    const c = lastConfig, l = lastLayout, opt = c.opt, manual = !place.auto && !l.staggered, lines = l.axis ? 'columns' : 'rows';
+    $('placeMode').textContent = manual ? 'Manual' : opt || l.staggered ? 'Optimal' : 'Searching';
     $('placeMode').classList.toggle('manual', manual);
-    $('placeText').textContent = !opt ? `Finding the exact optimum… ${Math.round(100*place.progress)}%`
+    $('placeText').textContent = l.staggered ? `Staggered ${lines}, exact maximum` + (!opt ? '' : l.count > opt.count ? `: ${fmt(l.count-opt.count)} more than the best grid` : ': same as the best grid')
+      : !opt ? `Finding the exact optimum… ${Math.round(100*place.progress)}%`
       : !manual ? `Exact maximum, from ${fmt(opt.tried)} candidate offsets`
       : opt.count > l.count ? `The optimum is ${fmt(opt.count)} dies, ${fmt(opt.count-l.count)} more` : 'This offset is also optimal';
-    $('fullDiesDesc').textContent = manual ? 'Manual offset' : opt ? 'Optimal placement' : 'Optimizing…';
+    $('fullDiesDesc').textContent = l.staggered ? `Staggered ${lines}` : manual ? 'Manual offset' : opt ? 'Optimal placement' : 'Optimizing…';
     $('optimalBtn').disabled = !manual;
     $('optimalBtn').textContent = manual ? 'Use optimal placement' : '✓ Optimal placement';
+    $('placeHelp').textContent = l.staggered
+      ? 'Plasma dicing: streets run straight in one direction only, and each row or column of dies is placed on its own, so every one holds as many dies as fit. Rows or columns are used, whichever fits more, and their shared offset is optimised exactly.'
+      : 'The optimum is exact, not sampled: every grid position where a pair of dies touches the usable edge is checked. Moving a slider switches to manual placement.';
   }
 
   function recalc() {
@@ -405,7 +492,7 @@
     else {place.ox = wrap(place.ox, c.px); place.oy = wrap(place.oy, c.py);}   // until the search finishes
     c.ox = place.ox; c.oy = place.oy; c.opt = opt;
     c.shape = region(c.R, c.cuts); c.outline = region(c.d/2, c.rim);
-    const layout = layoutFor(c), area = c.shape ? c.shape.area : 0;
+    const layout = place.stagger ? staggered(c) : layoutFor(c), area = c.shape ? c.shape.area : 0;
     lastConfig=c;lastLayout=layout;
     $('fullDies').textContent=fmt(layout.count);
     $('utilization').textContent=fmt(area?layout.count*c.w*c.h/area*100:0)+'%';
@@ -415,10 +502,12 @@
     $('dieArea').innerHTML=fmt3(c.w*c.h)+' <small>mm²</small>';
     $('usableArea').innerHTML=fmt(area)+' <small>mm²</small>';
     $('estimate').innerHTML=fmt(Math.floor(area/(c.px*c.py)))+' <small>dies</small>';
-    if (place.auto) {$('offsetX').value=(100*c.ox/c.px).toFixed(1); $('offsetY').value=(100*c.oy/c.py).toFixed(1);}
+    if (place.auto && !place.stagger) {$('offsetX').value=(100*c.ox/c.px).toFixed(1); $('offsetY').value=(100*c.oy/c.py).toFixed(1);}
+    $('offsetX').disabled = $('offsetY').disabled = place.stagger;   // staggered lines each have their own offset
     const off = v => Math.abs(v) < 5e-4 ? '0 mm' : (v>0?'+':'')+fmt3(v)+' mm';
-    $('offsetXval').textContent=off(c.ox);
-    $('offsetYval').textContent=off(c.oy);
+    $('offsetXval').textContent=!layout.staggered?off(c.ox):layout.axis?off(layout.o):'per row';
+    $('offsetYval').textContent=!layout.staggered?off(c.oy):layout.axis?'per column':off(layout.o);
+    document.querySelectorAll('[data-layout]').forEach(el=>{const on=(el.dataset.layout==='stagger')===place.stagger;el.classList.toggle('active',on);el.setAttribute('aria-pressed',on);});
     document.querySelectorAll('[data-size]').forEach(el=>{el.classList.toggle('active', Number(el.dataset.size)===c.d)});
     syncFlats(c);
     showPlacement();
@@ -450,17 +539,15 @@
     const maxRender=18000, stride=Math.max(1,Math.ceil(Math.sqrt(l.count/maxRender)));
     ctx.fillStyle=col('--die');ctx.strokeStyle=col('--die-edge');
     const drawStrokes=(c.w*scale>=5&&c.h*scale>=5 && stride===1 && l.count<4500);
-    const dw=c.w*scale,dh=c.h*scale;
-    for (const row of l.rows) {
-      if (stride>1 && (((row.j%stride)+stride)%stride)!==0) continue;
-      const ky=(mid-row.cy*scale)-dh/2;
+    const dw=c.w*scale,dh=c.h*scale,step=l.axis?c.py:c.px;
+    for (const ln of l.lines) {
+      if (stride>1 && (((ln.j%stride)+stride)%stride)!==0) continue;
       // When downsampling, keep die rectangles to scale rather than painting a fictitious continuous wafer.
-      const kStart=stride===1?row.minK:row.minK+((((-row.minK)%stride)+stride)%stride);
-      for(let k=kStart;k<=row.maxK;k+=stride) {
-        const xx=mid+(c.ox+k*c.px)*scale-dw/2;
+      for(let i=((-ln.k0%stride)+stride)%stride;i<ln.n;i+=stride) {
+        const a=ln.s+i*step, xx=mid+(l.axis?ln.t:a)*scale-dw/2, yy=mid-(l.axis?a:ln.t)*scale-dh/2;
         ctx.globalAlpha=stride>1?.8:.82;
-        ctx.fillRect(xx,ky,Math.max(.5,dw),Math.max(.5,dh));
-        if(drawStrokes){ctx.globalAlpha=.7;ctx.lineWidth=.65;ctx.strokeRect(xx+.4,ky+.4,Math.max(.1,dw-.8),Math.max(.1,dh-.8));}
+        ctx.fillRect(xx,yy,Math.max(.5,dw),Math.max(.5,dh));
+        if(drawStrokes){ctx.globalAlpha=.7;ctx.lineWidth=.65;ctx.strokeRect(xx+.4,yy+.4,Math.max(.1,dw-.8),Math.max(.1,dh-.8));}
       }
     }
     ctx.globalAlpha=1;
@@ -476,14 +563,15 @@
   function hover(e) {
     if(!lastConfig||!drawParams)return;
     const b=canvas.getBoundingClientRect(), px=e.clientX-b.left,py=e.clientY-b.top;
-    const {mid,scale}=drawParams, c=lastConfig;
+    const {mid,scale}=drawParams, c=lastConfig, l=lastLayout;
     const x=(px-mid)/scale, y=(mid-py)/scale;
-    const k=Math.round((x-c.ox)/c.px),j=Math.round((y-c.oy)/c.py);
-    const cx=c.ox+k*c.px,cy=c.oy+j*c.py;
-    const inside=lim(c,cy,0,EPS)&&cx>=LO-EPS&&cx<=HI+EPS;
-    const onDie=Math.abs(x-cx)<=c.w/2 && Math.abs(y-cy)<=c.h/2;
-    if(!inside||!onDie){tooltip.style.display='none';return;}
-    tooltip.textContent=`Die [${k}, ${j}] · X ${fmt3(cx)} mm · Y ${fmt3(cy)} mm`;
+    // Find the line under the pointer, then the die along it.
+    const along=l.axis?y:x, step=l.axis?c.py:c.px;
+    const ln=l.lines.find(r=>Math.abs((l.axis?x:y)-r.t)<=(l.axis?c.w:c.h)/2);
+    const i=ln?Math.round((along-ln.s)/step):-1;
+    if(!ln||i<0||i>=ln.n||Math.abs(along-ln.s-i*step)>(l.axis?c.h:c.w)/2){tooltip.style.display='none';return;}
+    const a=ln.s+i*step, cx=l.axis?ln.t:a, cy=l.axis?a:ln.t;
+    tooltip.textContent=(l.staggered?`${l.axis?'Column':'Row'} ${ln.j}, die ${i+1} of ${ln.n}`:`Die [${ln.k0+i}, ${ln.j}]`)+` · X ${fmt3(cx)} mm · Y ${fmt3(cy)} mm`;
     tooltip.style.display='block';
     const stage=$('canvasOuter').getBoundingClientRect();
     let lx=e.clientX-stage.left+13, ly=e.clientY-stage.top-38;
@@ -496,9 +584,13 @@
   function downloadCsv() {
     if(!lastLayout)return;
     if(lastLayout.count>150000){toast('CSV export is limited to 150,000 dies. Increase die size to export.');return;}
-    const c=lastConfig,rows=['column,row,x_center_mm,y_center_mm'];
-    for(const r of lastLayout.rows)for(let k=r.minK;k<=r.maxK;k++) rows.push([k,r.j,(c.ox+k*c.px).toFixed(6),r.cy.toFixed(6)].join(','));
-    saveBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),`wafer_${fmt3(c.d).replace('.','p')}mm_die_positions.csv`);
+    const c=lastConfig,l=lastLayout,step=l.axis?c.py:c.px;
+    const rows=[(l.staggered?(l.axis?'column,die_in_column':'row,die_in_row'):'column,row')+',x_center_mm,y_center_mm'];
+    for(const ln of l.lines)for(let i=0;i<ln.n;i++){
+      const a=ln.s+i*step;
+      rows.push([...(l.staggered?[ln.j,i+1]:[ln.k0+i,ln.j]),(l.axis?ln.t:a).toFixed(6),(l.axis?a:ln.t).toFixed(6)].join(','));
+    }
+    saveBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),`wafer_${fmt3(c.d).replace('.','p')}mm_${l.staggered?'staggered_':''}die_positions.csv`);
     toast('Die coordinates exported as CSV.');
   }
   function downloadPng() {
@@ -510,7 +602,8 @@
     o.drawImage(canvas,0,0);
     out.toBlob(b=>{if(b)saveBlob(b,'wafer_die_map.png')},'image/png');
   }
-  function reset(){ids.forEach(id=>$(id).value=defaults[id]);$('flatPreset').value='none';$('majorOn').checked=$('minorOn').checked=false;place.auto=true;recalc();toast('Geometry reset to defaults.');}
+  function reset(){ids.forEach(id=>$(id).value=defaults[id]);$('flatPreset').value='none';$('majorOn').checked=$('minorOn').checked=false;place.auto=true;place.stagger=false;recalc();toast('Geometry reset to defaults.');}
+  document.querySelectorAll('[data-layout]').forEach(el=>el.addEventListener('click',()=>{place.stagger=el.dataset.layout==='stagger';recalc();}));
   ['diameter','edge','dieW','dieH','scribe'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='diameter')semiLengths();recalc();}));
   ['majorOn','majorLen','minorOn','minorLen','minorAngle'].forEach(id=>$(id).addEventListener('input',()=>{$('flatPreset').value='custom';recalc();}));
   ['offsetX','offsetY'].forEach(id=>$(id).addEventListener('input',()=>{place.auto=false;recalc();}));
