@@ -19,7 +19,7 @@
       --fine:#5f727c; --foot:#566a75;
       /* Wafer map colors, read by the canvas renderer. */
       --wafer-a:#e4ecf1; --wafer-b:#c9d6de; --wafer-edge:#8fa9b5; --wafer-glow:rgba(16,42,58,.10); --usable:#eef3f6; --guide:rgba(70,110,128,.26);
-      --die:#1fbf93; --die-edge:rgba(4,80,62,.45); --excl:#c9700f; --label:#3e5563; --axis:#6b8290; --empty:#0e1f2a;
+      --die:#1fbf93; --die-edge:rgba(4,80,62,.45); --excl:#c9700f; --label:#3e5563; --axis:#6b8290; --empty:#0e1f2a; --cut:rgba(14,31,42,.26);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -31,10 +31,10 @@
         --pop-bg:#193444; --pop-border:#527c86; --pop-text:#fff; --pop-shadow:rgba(0,0,0,.28); --export-bg:#153043; --export-hover:#659caf; --insight-bg:rgba(17,39,55,.65);
         --fine:#8ea3ae; --foot:#77919d;
         --wafer-a:#244b60; --wafer-b:#132e41; --wafer-edge:#6ca7ac; --wafer-glow:rgba(80,224,182,.11); --usable:#102b39; --guide:rgba(118,177,190,.21);
-        --die:#4cd5af; --die-edge:rgba(169,255,222,.54); --excl:#f4b768; --label:#c0d5db; --axis:#79a3b3; --empty:#e6f1ef;
+        --die:#4cd5af; --die-edge:rgba(169,255,222,.54); --excl:#f4b768; --label:#c0d5db; --axis:#79a3b3; --empty:#e6f1ef; --cut:rgba(220,236,242,.3);
       }
     }
-    * {box-sizing:border-box} html {min-width:320px} body {margin:0; background:radial-gradient(circle at 77% -15%,var(--bg-glow),transparent 42%),var(--bg); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:var(--text); font-size:14px; line-height:1.45; font-variant-numeric:tabular-nums}
+    * {box-sizing:border-box} [hidden] {display:none !important} html {min-width:320px} body {margin:0; background:radial-gradient(circle at 77% -15%,var(--bg-glow),transparent 42%),var(--bg); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:var(--text); font-size:14px; line-height:1.45; font-variant-numeric:tabular-nums}
     button,input,select {font:inherit} button {cursor:pointer} button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible {outline:2px solid var(--mint-ink); outline-offset:3px}
     .app {max-width:1490px; padding:27px 34px 44px; margin:auto}
     .topbar {display:flex; justify-content:space-between; align-items:flex-start; gap:15px; padding-bottom:24px; margin-bottom:26px; border-bottom:1px solid var(--border-soft)}
@@ -55,9 +55,10 @@
     .range-title{display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-size:13px;margin:0 0 10px}.range-title strong{color:var(--text);font-size:12px;font-weight:650}.ranger{width:100%;margin:0 0 15px;accent-color:var(--mint-ink)}.range-scale{display:flex;justify-content:space-between;margin-top:-13px;margin-bottom:10px;color:var(--muted);font-size:10px}
     .primary{width:100%;border:1px solid var(--mint);border-radius:10px;background:var(--mint);color:var(--on-mint);font-weight:760;padding:12px 14px;display:flex;justify-content:center;align-items:center;gap:9px}.primary:hover{background:var(--mint-hover)}.primary:disabled,.primary:disabled:hover{opacity:.6;cursor:default;background:var(--mint)}.helper{font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.55}
     .right{min-width:0}.stats{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:12px;margin-bottom:14px}.stat{padding:17px 18px;min-width:0;min-height:106px;background:linear-gradient(150deg,var(--stat-a),var(--stat-b));border:1px solid var(--border-soft);border-radius:14px}.stat.mainstat{border-color:var(--main-border);background:linear-gradient(125deg,var(--main-a),var(--main-b))}.stat .label{font-size:11px;font-weight:680;color:var(--muted);text-transform:uppercase;letter-spacing:.075em;white-space:nowrap}.stat .number{font-size:clamp(20px,2.35vw,32px);letter-spacing:-.8px;font-weight:750;line-height:1.15;margin:12px 0 3px;white-space:nowrap}.stat.mainstat .number{color:var(--mint-ink)}.stat .desc{color:var(--muted);font-size:11px;white-space:nowrap}
-    .map-card{overflow:hidden}.map-header{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--border-soft);padding:16px 21px}.map-header h2{margin:0;font-size:15px}.map-header p{font-size:11px;color:var(--muted);margin:2px 0 0}.legend{display:flex;align-items:center;gap:15px;color:var(--sub);font-size:11px;flex-wrap:wrap}.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px;vertical-align:-1px}.legend .mint{background:var(--die)}.legend .gold{border:2px dashed var(--excl);border-radius:50%;background:none;width:11px;height:11px}
+    .edges{padding:13px 18px 12px;margin-bottom:14px}.edges table{width:100%;border-collapse:collapse;font-size:12.5px}.edges th,.edges td{padding:5px 0 5px 10px;text-align:right;white-space:nowrap;font-weight:650}.edges th:first-child{padding-left:0;text-align:left;white-space:normal;color:var(--sub);font-weight:600}.edges thead th{color:var(--muted);font-size:11px;font-weight:680;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border-soft);padding-bottom:7px}.edges p{margin:8px 0 0;font-size:11px;color:var(--muted);line-height:1.55}
+    .map-card{overflow:hidden}.map-header{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--border-soft);padding:16px 21px}.map-header h2{margin:0;font-size:15px}.map-header p{font-size:11px;color:var(--muted);margin:2px 0 0}.legend{display:flex;align-items:center;gap:15px;color:var(--sub);font-size:11px;flex-wrap:wrap}.legend i{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:2px;vertical-align:-1px}.legend .mint{background:var(--die)}.legend .gold{border:2px dashed var(--excl);border-radius:50%;background:none;width:11px;height:11px}.legend .cut{background:var(--cut);height:3px;border-radius:0}
     .canvas-outer{position:relative;min-height:330px;background:radial-gradient(ellipse at 50% 45%,var(--stage-glow),transparent 66%),var(--stage-bg);display:flex;justify-content:center;align-items:center;overflow:hidden}.canvas-outer:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;background-image:linear-gradient(var(--stage-grid) 1px,transparent 1px),linear-gradient(90deg,var(--stage-grid) 1px,transparent 1px);background-size:30px 30px}#waferCanvas{display:block;width:min(100%,690px);height:auto;aspect-ratio:1/1;position:relative}.hoverbox{display:none;position:absolute;z-index:5;background:var(--pop-bg);outline:1px solid var(--pop-border);border-radius:9px;padding:8px 10px;pointer-events:none;color:var(--pop-text);font-size:11px;box-shadow:0 10px 30px var(--pop-shadow);white-space:nowrap}
-    .map-footer{border-top:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:15px 21px}.status{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:8px}.status:before{content:"";height:7px;width:7px;background:var(--mint);border-radius:50%;box-shadow:0 0 0 4px var(--mint-ring)}.status[hidden]{display:none}.exports{display:flex;gap:9px;margin-left:auto}.export{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);background:var(--export-bg);border-radius:8px;color:var(--sub);font-size:12px}.export:hover{border-color:var(--export-hover);color:var(--text)}
+    .map-footer{border-top:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:15px 21px}.status{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:8px}.status:before{content:"";height:7px;width:7px;background:var(--mint);border-radius:50%;box-shadow:0 0 0 4px var(--mint-ring)}.exports{display:flex;gap:9px;margin-left:auto}.export{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);background:var(--export-bg);border-radius:8px;color:var(--sub);font-size:12px}.export:hover{border-color:var(--export-hover);color:var(--text)}
     .insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}.insight{border:1px solid var(--border-soft);border-radius:12px;background:var(--insight-bg);padding:14px 16px}.insight .key{font-size:11px;color:var(--muted);margin-bottom:6px}.insight .value{font-size:16px;font-weight:680;letter-spacing:-.15px}.insight .value small{color:var(--muted);font-size:11px;font-weight:450}
     .fineprint{margin:15px 2px 0;color:var(--fine);font-size:11px;line-height:1.7}.foot{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-top:27px;color:var(--foot);font-size:11px}.foot a{color:var(--sub);text-underline-offset:2px}.foot a:hover{color:var(--mint-ink)}
     .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,15px);z-index:20;opacity:0;pointer-events:none;border:1px solid var(--border);background:var(--pop-bg);color:var(--pop-text);padding:10px 15px;border-radius:11px;box-shadow:0 8px 35px var(--pop-shadow);transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translate(-50%,0)}
@@ -70,30 +71,32 @@
 <body>
 <div class="app">
   <header class="topbar">
-    <section class="intro"><h1>Die per wafer calculator.</h1><p>Explore how die dimensions, scribe streets, edge exclusion, and wafer flats affect the number of full dies on a wafer.</p></section>
+    <section class="intro"><h1>Die per wafer calculator.</h1><p>Explore how die dimensions, scribe streets, edge exclusion, and wafer flats affect the number of full dies on a wafer, or plan how to dice a rectangular plate into chips.</p></section>
     <button class="reset" id="resetBtn" type="button">↺ Reset</button>
   </header>
   <main class="layout">
     <aside class="panel controls" aria-label="Wafer calculator inputs">
       <div class="headingline"><h2>Configure geometry</h2><span>All sizes in mm</span></div>
-      <section class="section" aria-labelledby="waferSection"><h3 class="section-title" id="waferSection">01 / Wafer</h3>
-        <div class="field"><label class="fieldlabel" for="diameter">Wafer diameter</label><div class="input-wrap"><input id="diameter" type="number" min="1" max="450" step="0.1" value="200"><span class="unit">mm</span></div><div class="presets" aria-label="Common wafer diameters"><button data-size="50.8" type="button" title="50.8 mm (2 inch)">2″</button><button data-size="76.2" type="button" title="76.2 mm (3 inch)">3″</button><button data-size="100" type="button">100</button><button data-size="125" type="button">125</button><button data-size="150" type="button">150</button><button class="active" data-size="200" type="button">200</button><button data-size="300" type="button">300</button></div></div>
-        <div class="field"><label class="fieldlabel" for="edge">Edge exclusion <small>from rim and flats</small></label><div class="input-wrap"><input id="edge" type="number" min="0" max="100" step="0.1" value="3"><span class="unit">mm</span></div></div>
-        <div class="field"><label class="fieldlabel" for="flatPreset">Flats <small>SEMI M1 types</small></label><select class="select" id="flatPreset"><option value="none">None (round or notched)</option><option value="p111">(111) p-type · major only</option><option value="p100">(100) p-type · minor at 90°</option><option value="n100">(100) n-type · minor at 180°</option><option value="n111">(111) n-type · minor at 45°</option><option value="custom">Custom</option></select>
+      <section class="section" aria-labelledby="waferSection"><h3 class="section-title" id="waferSection">01 / Substrate</h3>
+        <div class="seg" role="group" aria-label="Substrate"><button type="button" data-sub="wafer" class="active" aria-pressed="true">Round wafer</button><button type="button" data-sub="plate" aria-pressed="false">Rectangular plate</button></div>
+        <div class="field" id="waferSize"><label class="fieldlabel" for="diameter">Wafer diameter <small>any size, up to 1000 mm</small></label><div class="input-wrap"><input id="diameter" type="number" min="1" max="1000" step="any" value="200"><span class="unit">mm</span></div><div class="presets" aria-label="Common wafer diameters"><button data-size="50.8" type="button" title="50.8 mm (2 inch)">2″</button><button data-size="76.2" type="button" title="76.2 mm (3 inch)">3″</button><button data-size="100" type="button">100</button><button data-size="125" type="button">125</button><button data-size="150" type="button">150</button><button class="active" data-size="200" type="button">200</button><button data-size="300" type="button">300</button></div></div>
+        <div class="two" id="plateSize" hidden><div class="field"><label class="fieldlabel" for="plateW">Plate width (X)</label><div class="input-wrap"><input id="plateW" type="number" min="1" max="1000" step="any" value="100"><span class="unit">mm</span></div></div><div class="field"><label class="fieldlabel" for="plateH">Plate height (Y)</label><div class="input-wrap"><input id="plateH" type="number" min="1" max="1000" step="any" value="100"><span class="unit">mm</span></div></div></div>
+        <div class="field"><label class="fieldlabel" for="edge">Edge exclusion <small id="edgeHint">from rim and flats</small></label><div class="input-wrap"><input id="edge" type="number" min="0" max="500" step="any" value="3"><span class="unit">mm</span></div></div>
+        <div class="field" id="flatsField"><label class="fieldlabel" for="flatPreset">Flats <small>SEMI M1 types</small></label><select class="select" id="flatPreset"><option value="none">None (round or notched)</option><option value="p111">(111) p-type · major only</option><option value="p100">(100) p-type · minor at 90°</option><option value="n100">(100) n-type · minor at 180°</option><option value="n111">(111) n-type · minor at 45°</option><option value="custom">Custom</option></select>
           <div class="flat-rows">
-            <label class="flat-check"><input type="checkbox" id="majorOn"> Major flat</label><div class="input-wrap"><input id="majorLen" type="number" min="0" max="440" step="0.01" value="32.5" aria-label="Major flat length"><span class="unit">mm</span></div>
-            <label class="flat-check"><input type="checkbox" id="minorOn"> Minor flat</label><div class="input-wrap"><input id="minorLen" type="number" min="0" max="440" step="0.01" value="18" aria-label="Minor flat length"><span class="unit">mm</span></div>
-            <label class="flat-check indent" for="minorAngle">Angle, CW</label><div class="angle-row"><div class="input-wrap"><input id="minorAngle" type="number" min="-360" max="360" step="1" value="90"><span class="unit">°</span></div><div class="picks" aria-label="Common minor-flat angles"><button data-angle="45" type="button">45</button><button data-angle="90" type="button">90</button><button data-angle="180" type="button">180</button></div></div>
+            <label class="flat-check"><input type="checkbox" id="majorOn"> Major flat</label><div class="input-wrap"><input id="majorLen" type="number" min="0" max="980" step="any" value="32.5" aria-label="Major flat length"><span class="unit">mm</span></div>
+            <label class="flat-check"><input type="checkbox" id="minorOn"> Minor flat</label><div class="input-wrap"><input id="minorLen" type="number" min="0" max="980" step="any" value="18" aria-label="Minor flat length"><span class="unit">mm</span></div>
+            <label class="flat-check indent" for="minorAngle">Angle, CW</label><div class="angle-row"><div class="input-wrap"><input id="minorAngle" type="number" min="-360" max="360" step="any" value="90"><span class="unit">°</span></div><div class="picks" aria-label="Common minor-flat angles"><button data-angle="45" type="button">45</button><button data-angle="90" type="button">90</button><button data-angle="180" type="button">180</button></div></div>
           </div>
           <p class="helper" id="flatNote"></p></div>
       </section>
       <section class="section" aria-labelledby="dieSection"><h3 class="section-title" id="dieSection">02 / Die dimensions</h3>
-        <div class="two"><div class="field"><label class="fieldlabel" for="dieW">Width (X)</label><div class="input-wrap"><input id="dieW" type="number" min="0.1" max="450" step="0.1" value="10"><span class="unit">mm</span></div></div><div class="field"><label class="fieldlabel" for="dieH">Height (Y)</label><div class="input-wrap"><input id="dieH" type="number" min="0.1" max="450" step="0.1" value="8"><span class="unit">mm</span></div></div></div>
-        <div class="field"><label class="fieldlabel" for="scribe">Scribe street width <small>between neighboring dies</small></label><div class="input-wrap"><input id="scribe" type="number" min="0" max="50" step="0.05" value="0.15"><span class="unit">mm</span></div></div>
+        <div class="two"><div class="field"><label class="fieldlabel" for="dieW">Width (X)</label><div class="input-wrap"><input id="dieW" type="number" min="0.1" max="1000" step="any" value="10"><span class="unit">mm</span></div></div><div class="field"><label class="fieldlabel" for="dieH">Height (Y)</label><div class="input-wrap"><input id="dieH" type="number" min="0.1" max="1000" step="any" value="8"><span class="unit">mm</span></div></div></div>
+        <div class="field"><label class="fieldlabel" for="scribe">Scribe street width <small id="streetHint">between neighboring dies</small></label><div class="input-wrap"><input id="scribe" type="number" min="0" max="50" step="any" value="0.15"><span class="unit">mm</span></div></div>
         <button class="swap" id="swapBtn" type="button" title="Rotate all dies 90 degrees">⇄ &nbsp;Swap die orientation</button>
       </section>
       <section class="section" aria-labelledby="alignSection"><h3 class="section-title" id="alignSection">03 / Dicing layout</h3>
-        <div class="seg" role="group" aria-label="Dicing layout"><button type="button" data-layout="grid" class="active" aria-pressed="true">Grid · saw</button><button type="button" data-layout="stagger" aria-pressed="false">Staggered · plasma</button></div>
+        <div class="seg" id="layoutSeg" role="group" aria-label="Dicing layout"><button type="button" data-layout="grid" class="active" aria-pressed="true">Grid · saw</button><button type="button" data-layout="stagger" aria-pressed="false">Staggered · plasma</button></div>
         <div class="placement" aria-live="polite"><span class="pill" id="placeMode">Optimal</span><span id="placeText">Finding the exact optimum…</span></div>
         <div class="range-title"><label for="offsetX">Horizontal offset</label><strong id="offsetXval">0 mm</strong></div><input class="ranger" id="offsetX" type="range" min="-50" max="50" step="0.1" value="0" aria-label="Horizontal grid offset"><div class="range-scale"><span>−½ pitch</span><span>Center</span><span>+½ pitch</span></div>
         <div class="range-title"><label for="offsetY">Vertical offset</label><strong id="offsetYval">0 mm</strong></div><input class="ranger" id="offsetY" type="range" min="-50" max="50" step="0.1" value="0" aria-label="Vertical grid offset"><div class="range-scale"><span>−½ pitch</span><span>Center</span><span>+½ pitch</span></div>
@@ -103,18 +106,22 @@
     </aside>
     <section class="right" aria-label="Calculated results and wafer map">
       <div class="stats" aria-live="polite">
-        <div class="stat mainstat"><div class="label">Full dies / wafer</div><div id="fullDies" class="number">—</div><div class="desc" id="fullDiesDesc">Optimal placement</div></div>
+        <div class="stat mainstat"><div class="label" id="countLabel">Full dies / wafer</div><div id="fullDies" class="number">—</div><div class="desc" id="fullDiesDesc">Optimal placement</div></div>
         <div class="stat"><div class="label">Area utilization</div><div id="utilization" class="number">—</div><div class="desc">Die area / usable area</div></div>
-        <div class="stat"><div class="label">Usable diameter</div><div id="usableDia" class="number">—</div><div class="desc">After edge exclusion</div></div>
+        <div class="stat"><div class="label" id="sizeLabel">Usable diameter</div><div id="usableDia" class="number">—</div><div class="desc">After edge exclusion</div></div>
         <div class="stat"><div class="label">Die pitch</div><div id="diePitch" class="number">—</div><div class="desc">X × Y, with streets</div></div>
       </div>
-      <div class="panel map-card">
-        <div class="map-header"><div><h2>Wafer map</h2><p>Top view · proportional die layout</p></div><div class="legend"><span><i class="mint"></i>Full die</span><span><i class="gold"></i>Exclusion boundary</span></div></div>
-        <div class="canvas-outer" id="canvasOuter"><canvas id="waferCanvas" width="800" height="800" role="img" aria-label="Visualization of rectangular dies that fit completely on the usable part of the wafer"></canvas><div class="hoverbox" id="hoverbox"></div></div>
-        <div class="map-footer"><div class="status" id="mapStatus" hidden></div><div class="exports"><button class="export" type="button" id="pngBtn" title="Save the current wafer map as a PNG image">↓ PNG</button><button class="export" type="button" id="csvBtn" title="Export positions of all counted dies">↓ Die CSV</button></div></div>
+      <div class="panel edges" id="edgePanel" hidden>
+        <table><thead><tr><th>Edge distance, mm</th><th>Left</th><th>Right</th><th>Bottom</th><th>Top</th></tr></thead><tbody id="edgeRows"></tbody></table>
+        <p id="cutSummary"></p>
       </div>
-      <div class="insights"><div class="insight"><div class="key">Single die area</div><div class="value" id="dieArea">—</div></div><div class="insight"><div class="key">Usable wafer area</div><div class="value" id="usableArea">—</div></div><div class="insight"><div class="key">Area-only die estimate</div><div class="value" id="estimate">—</div></div></div>
-      <p class="fineprint">Method: a die counts when all four corners lie inside the usable area, which is the wafer outline (circle and any flats) moved inward by the edge exclusion. Dies sit on one regular grid aligned with the major flat, with straight X and Y streets running across the whole wafer, as a dicing saw cuts them. The staggered option models plasma dicing: streets run straight in one direction only and each row (or column) is placed on its own, with the shared offset chosen exactly. The optimal placement is exact rather than sampled: an optimal grid can always be slid down and then left until one die, or a pair of dies, meets the edge of the usable area. That area is convex, flats included, so checking the lowest-left position of every die pair finds an optimum, to within 10⁻⁸ mm. The area-only estimate is usable area divided by pitch area, not an exact packing limit.</p>
+      <div class="panel map-card">
+        <div class="map-header"><div><h2 id="mapTitle">Wafer map</h2><p>Top view · proportional die layout</p></div><div class="legend"><span><i class="mint"></i>Full die</span><span><i class="gold"></i>Exclusion boundary</span><span id="legendCut" hidden><i class="cut"></i>Saw cut</span></div></div>
+        <div class="canvas-outer" id="canvasOuter"><canvas id="waferCanvas" width="800" height="800" role="img" aria-label="Visualization of rectangular dies that fit completely on the usable part of the wafer or plate"></canvas><div class="hoverbox" id="hoverbox"></div></div>
+        <div class="map-footer"><div class="status" id="mapStatus" hidden></div><div class="exports"><button class="export" type="button" id="pngBtn" title="Save the current wafer map as a PNG image">↓ PNG</button><button class="export" type="button" id="csvBtn" title="Export positions of all counted dies">↓ Die CSV</button><button class="export" type="button" id="cutBtn" title="Export the saw cut positions, measured from the plate edges" hidden>↓ Cut list</button></div></div>
+      </div>
+      <div class="insights"><div class="insight"><div class="key">Single die area</div><div class="value" id="dieArea">—</div></div><div class="insight"><div class="key" id="usableAreaKey">Usable wafer area</div><div class="value" id="usableArea">—</div></div><div class="insight"><div class="key">Area-only estimate</div><div class="value" id="estimate">—</div></div></div>
+      <p class="fineprint">Method: a die counts when all four corners lie inside the usable area, which is the wafer outline (circle and any flats) moved inward by the edge exclusion. Dies sit on one regular grid aligned with the major flat, with straight X and Y streets running across the whole wafer, as a dicing saw cuts them. The staggered option models plasma dicing: streets run straight in one direction only and each row (or column) is placed on its own, with the shared offset chosen exactly. The optimal placement is exact rather than sampled: an optimal grid can always be slid down and then left until one die, or a pair of dies, meets the edge of the usable area. That area is convex, flats included, so checking the lowest-left position of every die pair finds an optimum, to within 10⁻⁸ mm. On a rectangular plate every row and column has the same usable length, so centred cuts already fit the most chips; its edge distances run from each plate edge to the outermost chips, and to the centre line of the outer trim cut half a street further out. The area-only estimate is usable area divided by pitch area, not an exact packing limit.</p>
     </section>
   </main>
   <footer class="foot"><span>Made with AI tools.</span><span>Dedicated to the public domain under <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="license">CC0 1.0</a> — do whatever you want with it.</span></footer>
@@ -124,19 +131,20 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
-  const ids = ['diameter', 'edge', 'dieW', 'dieH', 'scribe', 'majorLen', 'minorLen', 'minorAngle', 'offsetX', 'offsetY'];
-  const defaults = {diameter:200, edge:3, dieW:10, dieH:8, scribe:0.15, majorLen:32.5, minorLen:18, minorAngle:90, offsetX:0, offsetY:0};
+  const ids = ['diameter', 'plateW', 'plateH', 'edge', 'dieW', 'dieH', 'scribe', 'majorLen', 'minorLen', 'minorAngle', 'offsetX', 'offsetY'];
+  const defaults = {diameter:200, plateW:100, plateH:100, edge:3, dieW:10, dieH:8, scribe:0.15, majorLen:32.5, minorLen:18, minorAngle:90, offsetX:0, offsetY:0};
   // SEMI M1 flat lengths in mm (major, minor) for the wafer diameters that carry flats.
   const SEMI = {50.8:[15.88, 8], 76.2:[22.22, 11.18], 100:[32.5, 18], 125:[42.5, 27.5], 150:[57.5, 37.5]};
   // SEMI flat types: minor-flat angle clockwise from the major flat, or null for a major flat only.
   const TYPES = {p111:null, p100:90, n100:180, n111:45};
   const fmt = n => Number(n).toLocaleString('en-US', {maximumFractionDigits:2});
   const fmt3 = n => Number(n).toLocaleString('en-US', {maximumFractionDigits:3});
+  const tag = n => String(+Number(n).toFixed(3)).replace('.', 'p');   // a size for file names, e.g. 76p2
   const canvas = $('waferCanvas'), ctx = canvas.getContext('2d'), tooltip = $('hoverbox');
   let lastConfig, lastLayout, drawParams, toastTimer;
   const EPS = 1e-8;      // a die counts when it lies inside the usable area to within this many mm
   const EPS_GEN = 1e-9;  // tighter tolerance for generating candidate offsets, so rounding cannot lose a die
-  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false};
+  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false, plate:false};
   let LO = 0, HI = 0;    // die-centre limits set by lim()
 
   function num(id, fallback, min, max) {
@@ -145,11 +153,19 @@
   }
   const wrap = (v, p) => v-Math.round(v/p)*p;
   function getConfig() {
-    const d = num('diameter',200,1,450);
-    const edge = num('edge',3,0,d/2);
-    const w = num('dieW',10,.1,450), h = num('dieH',8,.1,450);
+    const w = num('dieW',10,.1,1000), h = num('dieH',8,.1,1000);
     const scribe = num('scribe',.15,0,50);
     const px = w+scribe, py = h+scribe;
+    if (place.plate) {
+      // A plate is the rectangle |x| <= W/2, |y| <= H/2, i.e. four straight cuts. The circle sits just outside
+      // its corners, so it never limits anything and every routine below works for plates unchanged.
+      const W = num('plateW',100,1,1000), H = num('plateH',100,1,1000), edge = num('edge',3,0,Math.min(W,H)/2);
+      const box = (a, b) => [{nx:1, ny:0, d:a}, {nx:-1, ny:0, d:a}, {nx:0, ny:1, d:b}, {nx:0, ny:-1, d:b}];
+      const outside = (a, b) => Math.hypot(a, b)*1.001+1e-6;
+      return {plate:true, W, H, d:Math.max(W,H), edge, w, h, scribe, px, py, R:outside(W/2-edge, H/2-edge), rimR:outside(W/2, H/2), rim:box(W/2, H/2), cuts:box(W/2-edge, H/2-edge)};
+    }
+    const d = num('diameter',200,1,1000);
+    const edge = num('edge',3,0,d/2);
     // Flats as outward unit normals and distances from the wafer centre; the major flat faces down.
     const rim = [], dist = len => Math.sqrt(d*d/4-len*len/4), snap = v => Math.abs(v) < 1e-12 ? 0 : v;
     if ($('majorOn').checked) rim.push({nx:0, ny:-1, d:dist(num('majorLen',32.5,0,.98*d))});
@@ -159,7 +175,7 @@
     }
     // Usable area: the whole outline, flats included, moved inward by the edge exclusion.
     const cuts = rim.map(f => ({nx:f.nx, ny:f.ny, d:f.d-edge}));
-    return {d, edge, w, h, scribe, px, py, R:Math.max(0,d/2-edge), rim, cuts};
+    return {plate:false, d, edge, w, h, scribe, px, py, R:Math.max(0,d/2-edge), rimR:d/2, rim, cuts};
   }
 
   // Die-centre limits along one grid line: a row at height t (axis 0) or a column at x = t (axis 1).
@@ -194,6 +210,28 @@
   // A layout is a list of lines: rows, or columns when axis is 1. Line j at position t holds n dies centred at
   // s, s+pitch, ... along it; k0 is the grid column of its first die (0 for staggered lines).
   function layoutFor(c) { const lines = []; return {count:countAt(c, c.ox, c.oy, lines), axis:0, staggered:false, lines}; }
+
+  // Plate: every row and every column has the same usable length, so the most chips a row can hold,
+  // floor((usable - chip)/pitch) + 1, is reached at any offset that keeps them inside. Centring the block
+  // reaches it and leaves equal edge strips on opposite sides, so no search is needed.
+  function centred(c) {
+    const fit = (len, size, p) => len < size-2*EPS ? 0 : Math.floor((len-size+2*EPS)/p)+1;
+    const nx = fit(c.W-2*c.edge, c.w, c.px), ny = fit(c.H-2*c.edge, c.h, c.py);
+    return {count:nx*ny, ox:nx ? wrap(-(nx-1)*c.px/2, c.px) : 0, oy:ny ? wrap(-(ny-1)*c.py/2, c.py) : 0};
+  }
+  // Plate edges from the chips actually placed: the strip from each plate edge to the outermost chips
+  // (left, right, bottom, top) and the centre line of each outer trim cut, half a street further out.
+  // k and j are the grid indices of the bottom-left chip, used to number chips from that corner.
+  function edgeInfo(c, l) {
+    if (!l.count) return null;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, k = Infinity, j = Infinity;
+    for (const ln of l.lines) {
+      x0 = Math.min(x0, ln.s); x1 = Math.max(x1, ln.s+(ln.n-1)*c.px); y0 = Math.min(y0, ln.t); y1 = Math.max(y1, ln.t);
+      k = Math.min(k, ln.k0); j = Math.min(j, ln.j);
+    }
+    const strip = [x0-c.w/2+c.W/2, c.W/2-x1-c.w/2, y0-c.h/2+c.H/2, c.H/2-y1-c.h/2];
+    return {strip, cut:strip.map(v => v-c.scribe/2), nx:Math.round((x1-x0)/c.px)+1, ny:Math.round((y1-y0)/c.py)+1, k, j};
+  }
   function toast(s) {clearTimeout(toastTimer);$('toast').textContent=s;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2800);}
 
   // Smallest x in [a, b] where the convex function f is <= 0, or NaN if there is none.
@@ -300,7 +338,9 @@
      For a round wafer or the SEMI flat positions, each row's usable stretch lies inside that of any row nearer the
      middle, and likewise for columns. Closing up a wider-than-needed street therefore never loses a die, so uneven
      street spacing cannot beat this grid. The staggered option for plasma dicing, where each row or column slides
-     on its own, is solved separately by staggerAlong() below. */
+     on its own, is solved separately by staggerAlong() below.
+     A rectangular plate is four straight cuts with the circle moved outside its corners. All its rows and columns
+     have the same usable length, so centred cuts already fit the most chips and this search is not run; see centred(). */
   function* optimise(c) {
     const best = {count:-1, ox:0, oy:0, tried:0};
     const take = (ox, oy) => {
@@ -456,7 +496,7 @@
     semiLengths();
   }
   function semiLengths() {   // a SEMI type follows the wafer diameter
-    const s = SEMI[num('diameter',200,1,450)];
+    const s = SEMI[num('diameter',200,1,1000)];
     if (s && $('flatPreset').value in TYPES) {$('majorLen').value = s[0]; $('minorLen').value = s[1];}
   }
   function syncFlats(c) {
@@ -469,6 +509,18 @@
   }
   function showPlacement() {
     const c = lastConfig, l = lastLayout, opt = c.opt, manual = !place.auto && !l.staggered, lines = l.axis ? 'columns' : 'rows';
+    if (c.plate) {
+      const e = c.edges;
+      $('placeMode').textContent = manual ? 'Manual' : 'Centred';
+      $('placeMode').classList.toggle('manual', manual);
+      $('placeText').textContent = !manual ? 'Equal edge strips on opposite sides, and the most chips possible'
+        : opt.count > l.count ? `Centred cuts give ${fmt(opt.count)} chips, ${fmt(opt.count-l.count)} more` : 'Same chip count as centred cuts';
+      $('fullDiesDesc').textContent = (e ? `${e.nx} × ${e.ny} chips` : 'No chips') + (manual ? ', manual offset' : ', centred');
+      $('optimalBtn').disabled = !manual;
+      $('optimalBtn').textContent = manual ? 'Centre the cuts' : '✓ Centred cuts';
+      $('placeHelp').textContent = 'Centred cuts leave equal edge strips on opposite sides and already fit the most chips. Moving a slider shifts the cuts; chips that would cross the edge exclusion are dropped.';
+      return;
+    }
     $('placeMode').textContent = manual ? 'Manual' : opt || l.staggered ? 'Optimal' : 'Searching';
     $('placeMode').classList.toggle('manual', manual);
     $('placeText').textContent = l.staggered ? `Staggered ${lines}, exact maximum` + (!opt ? '' : l.count > opt.count ? `: ${fmt(l.count-opt.count)} more than the best grid` : ': same as the best grid')
@@ -484,35 +536,62 @@
   }
 
   function recalc() {
-    const c = getConfig(), key = JSON.stringify([c.d, c.edge, c.w, c.h, c.scribe, c.cuts]);
-    const opt = place.opt && place.opt.key === key ? place.opt : null;
+    const c = getConfig(), plate = c.plate, stagger = place.stagger && !plate;
+    const key = JSON.stringify([plate, c.d, c.edge, c.w, c.h, c.scribe, c.cuts]);
+    const opt = plate ? {key, ...centred(c)} : place.opt && place.opt.key === key ? place.opt : null;
     if (opt && place.solving) {place.token++; place.solving = null;}   // an older search is no longer needed
-    if (!place.auto) {place.ox = c.px*num('offsetX',0,-50,50)/100; place.oy = c.py*num('offsetY',0,-50,50)/100;}
+    const base = plate ? opt : {ox:0, oy:0};   // on a plate the sliders shift the cuts away from centred
+    if (!place.auto) {place.ox = base.ox+c.px*num('offsetX',0,-50,50)/100; place.oy = base.oy+c.py*num('offsetY',0,-50,50)/100;}
     else if (opt) {place.ox = opt.ox; place.oy = opt.oy;}
     else {place.ox = wrap(place.ox, c.px); place.oy = wrap(place.oy, c.py);}   // until the search finishes
     c.ox = place.ox; c.oy = place.oy; c.opt = opt;
-    c.shape = region(c.R, c.cuts); c.outline = region(c.d/2, c.rim);
-    const layout = place.stagger ? staggered(c) : layoutFor(c), area = c.shape ? c.shape.area : 0;
+    c.shape = region(c.R, c.cuts); c.outline = region(c.rimR, c.rim);
+    const layout = stagger ? staggered(c) : layoutFor(c), area = c.shape ? c.shape.area : 0;
+    c.edges = plate ? edgeInfo(c, layout) : null;
     lastConfig=c;lastLayout=layout;
     $('fullDies').textContent=fmt(layout.count);
     $('utilization').textContent=fmt(area?layout.count*c.w*c.h/area*100:0)+'%';
-    $('usableDia').textContent=fmt3(c.R*2)+' mm';
+    $('usableDia').textContent=plate?fmt3(Math.max(0,c.W-2*c.edge))+' × '+fmt3(Math.max(0,c.H-2*c.edge)):fmt3(c.R*2)+' mm';
+    $('usableDia').style.fontSize=$('usableDia').textContent.length>11?'19px':'';
     $('diePitch').textContent=fmt3(c.px)+' × '+fmt3(c.py);
     $('diePitch').style.fontSize=(c.px>99||c.py>99)?'19px':'';
     $('dieArea').innerHTML=fmt3(c.w*c.h)+' <small>mm²</small>';
     $('usableArea').innerHTML=fmt(area)+' <small>mm²</small>';
-    $('estimate').innerHTML=fmt(Math.floor(area/(c.px*c.py)))+' <small>dies</small>';
-    if (place.auto && !place.stagger) {$('offsetX').value=(100*c.ox/c.px).toFixed(1); $('offsetY').value=(100*c.oy/c.py).toFixed(1);}
-    $('offsetX').disabled = $('offsetY').disabled = place.stagger;   // staggered lines each have their own offset
+    $('estimate').innerHTML=fmt(Math.floor(area/(c.px*c.py)))+(plate?' <small>chips</small>':' <small>dies</small>');
+    if (place.auto && !stagger) {$('offsetX').value=(100*(c.ox-base.ox)/c.px).toFixed(1); $('offsetY').value=(100*(c.oy-base.oy)/c.py).toFixed(1);}
+    $('offsetX').disabled = $('offsetY').disabled = stagger;   // staggered lines each have their own offset
     const off = v => Math.abs(v) < 5e-4 ? '0 mm' : (v>0?'+':'')+fmt3(v)+' mm';
-    $('offsetXval').textContent=!layout.staggered?off(c.ox):layout.axis?off(layout.o):'per row';
-    $('offsetYval').textContent=!layout.staggered?off(c.oy):layout.axis?'per column':off(layout.o);
-    document.querySelectorAll('[data-layout]').forEach(el=>{const on=(el.dataset.layout==='stagger')===place.stagger;el.classList.toggle('active',on);el.setAttribute('aria-pressed',on);});
+    $('offsetXval').textContent=!layout.staggered?off(c.ox-base.ox):layout.axis?off(layout.o):'per row';
+    $('offsetYval').textContent=!layout.staggered?off(c.oy-base.oy):layout.axis?'per column':off(layout.o);
+    const press = (sel, on) => document.querySelectorAll(sel).forEach(el=>{const a=on(el);el.classList.toggle('active',a);el.setAttribute('aria-pressed',a);});
+    press('[data-layout]', el => (el.dataset.layout==='stagger')===place.stagger);
+    press('[data-sub]', el => (el.dataset.sub==='plate')===plate);
     document.querySelectorAll('[data-size]').forEach(el=>{el.classList.toggle('active', Number(el.dataset.size)===c.d)});
-    syncFlats(c);
+    // Wafer or plate controls and wording.
+    $('waferSize').hidden = $('flatsField').hidden = $('layoutSeg').hidden = plate;
+    $('plateSize').hidden = $('edgePanel').hidden = $('legendCut').hidden = $('cutBtn').hidden = !plate;
+    $('edgeHint').textContent = plate ? 'from each edge' : 'from rim and flats';
+    $('streetHint').textContent = plate ? 'saw kerf between chips' : 'between neighboring dies';
+    $('dieSection').textContent = plate ? '02 / Chip dimensions' : '02 / Die dimensions';
+    $('alignSection').textContent = plate ? '03 / Cut placement' : '03 / Dicing layout';
+    $('countLabel').textContent = plate ? 'Full chips / plate' : 'Full dies / wafer';
+    $('sizeLabel').textContent = plate ? 'Usable size' : 'Usable diameter';
+    $('usableAreaKey').textContent = plate ? 'Usable plate area' : 'Usable wafer area';
+    $('mapTitle').textContent = plate ? 'Plate map' : 'Wafer map';
+    $('csvBtn').textContent = plate ? '↓ Chip CSV' : '↓ Die CSV';
+    if (plate) showEdges(c); else syncFlats(c);
     showPlacement();
     requestAnimationFrame(draw);
     if (!opt && place.solving !== key) solve(c, key);
+  }
+  function showEdges(c) {   // the plate's edge table and a summary of the cuts for the saw
+    const e = c.edges, row = (name, v) => `<tr><th>${name}</th>${v.map(x => `<td>${e ? fmt3(x) : '—'}</td>`).join('')}</tr>`;
+    $('edgeRows').innerHTML = row('To chip', e ? e.strip : [0,0,0,0]) + row('To first cut', e ? e.cut : [0,0,0,0]);
+    $('cutSummary').textContent = !e ? 'No chips fit, so there are no cuts.'
+      : `Vertical cuts: ${e.nx+1}, the first ${fmt3(e.cut[0])} mm from the left edge, then every ${fmt3(c.px)} mm. `
+      + `Horizontal cuts: ${e.ny+1}, the first ${fmt3(e.cut[2])} mm from the bottom edge, then every ${fmt3(c.py)} mm. `
+      + 'Both counts include the two outer cuts that trim off the edge strips.'
+      + (e.cut.some(v => v < 0) ? ' A negative first cut puts the blade centre outside the plate edge.' : '');
   }
   function draw() {
     if(!lastConfig)return;
@@ -525,7 +604,8 @@
     const pixels=Math.round(size*dpr);
     if(canvas.width!==pixels||canvas.height!==pixels){canvas.width=pixels;canvas.height=pixels;}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,size,size);
-    const mid=size/2, pad=Math.max(34,size*.08), scale=(size-2*pad)/c.d, outerR=c.d/2*scale;
+    const mid=size/2, pad=Math.max(34,size*.08), scale=(size-2*pad)/c.d;
+    const hw=(c.plate?c.W:c.d)/2*scale, hh=(c.plate?c.H:c.d)/2*scale, outerR=Math.max(hw,hh);
     drawParams={mid,scale,size};
     const outerGrad=ctx.createRadialGradient(mid-outerR*.33,mid-outerR*.4,outerR*.05,mid,mid,outerR*1.2);
     outerGrad.addColorStop(0,col('--wafer-a'));outerGrad.addColorStop(1,col('--wafer-b'));
@@ -535,7 +615,7 @@
     if(c.shape){ctx.beginPath();tracePath(c.shape,mid,scale);ctx.fillStyle=col('--usable');ctx.fill();}
     // Coordinate guides.
     ctx.save();ctx.strokeStyle=col('--guide');ctx.lineWidth=1;ctx.setLineDash([4,6]);
-    ctx.beginPath();ctx.moveTo(mid-outerR,mid);ctx.lineTo(mid+outerR,mid);ctx.moveTo(mid,mid-outerR);ctx.lineTo(mid,mid+outerR);ctx.stroke();ctx.restore();
+    ctx.beginPath();ctx.moveTo(mid-hw,mid);ctx.lineTo(mid+hw,mid);ctx.moveTo(mid,mid-hh);ctx.lineTo(mid,mid+hh);ctx.stroke();ctx.restore();
     const maxRender=18000, stride=Math.max(1,Math.ceil(Math.sqrt(l.count/maxRender)));
     ctx.fillStyle=col('--die');ctx.strokeStyle=col('--die-edge');
     const drawStrokes=(c.w*scale>=5&&c.h*scale>=5 && stride===1 && l.count<4500);
@@ -551,13 +631,20 @@
       }
     }
     ctx.globalAlpha=1;
+    if(c.edges){   // saw cuts, as bands the width of the kerf (at least one pixel), across the whole plate
+      const e=c.edges, left=mid-hw, bottom=mid+hh;
+      ctx.save();ctx.strokeStyle=col('--cut');ctx.lineWidth=Math.max(1,c.scribe*scale);ctx.beginPath();
+      if(c.px*scale>=3) for(let k=0;k<=e.nx;k++){const x=left+(e.cut[0]+k*c.px)*scale;ctx.moveTo(x,mid-hh);ctx.lineTo(x,bottom);}
+      if(c.py*scale>=3) for(let k=0;k<=e.ny;k++){const y=bottom-(e.cut[2]+k*c.py)*scale;ctx.moveTo(left,y);ctx.lineTo(mid+hw,y);}
+      ctx.stroke();ctx.restore();
+    }
     if(c.shape){ctx.save();ctx.beginPath();tracePath(c.shape,mid,scale);ctx.strokeStyle=col('--excl');ctx.lineWidth=1.6;ctx.setLineDash([6,5]);ctx.stroke();ctx.restore();}
     ctx.fillStyle=col('--label');ctx.font=`${Math.max(10,Math.min(12,size*.018))}px Arial,sans-serif`;ctx.textAlign='center';
-    ctx.fillText('Ø '+fmt3(c.d)+' mm',mid,mid+outerR+Math.max(19,pad*.47));
+    ctx.fillText(c.plate?fmt3(c.W)+' × '+fmt3(c.H)+' mm':'Ø '+fmt3(c.d)+' mm',mid,mid+hh+Math.max(19,pad*.47));
     ctx.textAlign='left';ctx.fillStyle=col('--axis');ctx.font=`${Math.max(9,Math.min(11,size*.017))}px Arial,sans-serif`;
-    ctx.fillText('−X',Math.max(6,mid-outerR-28),mid-7);
-    ctx.fillText('+X',Math.min(size-22,mid+outerR+7),mid-7);
-    if(!l.count){ctx.textAlign='center';ctx.fillStyle=col('--empty');ctx.font=`600 ${Math.max(13,size*.025)}px Arial,sans-serif`;ctx.fillText('No complete dies fit',mid,mid-10);}
+    ctx.fillText('−X',Math.max(6,mid-hw-28),mid-7);
+    ctx.fillText('+X',Math.min(size-22,mid+hw+7),mid-7);
+    if(!l.count){ctx.textAlign='center';ctx.fillStyle=col('--empty');ctx.font=`600 ${Math.max(13,size*.025)}px Arial,sans-serif`;ctx.fillText(c.plate?'No complete chips fit':'No complete dies fit',mid,mid-10);}
     // Only worth saying when the map leaves dies out.
     $('mapStatus').hidden=stride===1;
     $('mapStatus').textContent=`Map thinned to 1 in ${stride*stride} dies for speed; the count is exact`;
@@ -572,8 +659,9 @@
     const ln=l.lines.find(r=>Math.abs((l.axis?x:y)-r.t)<=(l.axis?c.w:c.h)/2);
     const i=ln?Math.round((along-ln.s)/step):-1;
     if(!ln||i<0||i>=ln.n||Math.abs(along-ln.s-i*step)>(l.axis?c.h:c.w)/2){tooltip.style.display='none';return;}
-    const a=ln.s+i*step, cx=l.axis?ln.t:a, cy=l.axis?a:ln.t;
-    tooltip.textContent=(l.staggered?`${l.axis?'Column':'Row'} ${ln.j}, die ${i+1} of ${ln.n}`:`Die [${ln.k0+i}, ${ln.j}]`)+` · X ${fmt3(cx)} mm · Y ${fmt3(cy)} mm`;
+    const a=ln.s+i*step, cx=l.axis?ln.t:a, cy=l.axis?a:ln.t, ed=c.edges;
+    tooltip.textContent=ed?`Chip [${ln.k0+i-ed.k+1}, ${ln.j-ed.j+1}] · X ${fmt3(cx+c.W/2)} mm · Y ${fmt3(cy+c.H/2)} mm from bottom-left`
+      :(l.staggered?`${l.axis?'Column':'Row'} ${ln.j}, die ${i+1} of ${ln.n}`:`Die [${ln.k0+i}, ${ln.j}]`)+` · X ${fmt3(cx)} mm · Y ${fmt3(cy)} mm`;
     tooltip.style.display='block';
     const stage=$('canvasOuter').getBoundingClientRect();
     let lx=e.clientX-stage.left+13, ly=e.clientY-stage.top-38;
@@ -586,14 +674,25 @@
   function downloadCsv() {
     if(!lastLayout)return;
     if(lastLayout.count>150000){toast('CSV export is limited to 150,000 dies. Increase die size to export.');return;}
-    const c=lastConfig,l=lastLayout,step=l.axis?c.py:c.px;
-    const rows=[(l.staggered?(l.axis?'column,die_in_column':'row,die_in_row'):'column,row')+',x_center_mm,y_center_mm'];
+    const c=lastConfig,l=lastLayout,step=l.axis?c.py:c.px,e=c.edges;
+    // Plates number chips from 1 at the bottom-left corner and measure from the left and bottom edges.
+    const rows=[e?'column,row,x_from_left_mm,y_from_bottom_mm':(l.staggered?(l.axis?'column,die_in_column':'row,die_in_row'):'column,row')+',x_center_mm,y_center_mm'];
     for(const ln of l.lines)for(let i=0;i<ln.n;i++){
-      const a=ln.s+i*step;
-      rows.push([...(l.staggered?[ln.j,i+1]:[ln.k0+i,ln.j]),(l.axis?ln.t:a).toFixed(6),(l.axis?a:ln.t).toFixed(6)].join(','));
+      const a=ln.s+i*step, x=l.axis?ln.t:a, y=l.axis?a:ln.t;
+      rows.push((e?[ln.k0+i-e.k+1,ln.j-e.j+1,(x+c.W/2).toFixed(6),(y+c.H/2).toFixed(6)]:[...(l.staggered?[ln.j,i+1]:[ln.k0+i,ln.j]),x.toFixed(6),y.toFixed(6)]).join(','));
     }
-    saveBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),`wafer_${fmt3(c.d).replace('.','p')}mm_${l.staggered?'staggered_':''}die_positions.csv`);
-    toast('Die coordinates exported as CSV.');
+    saveBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),c.plate?`plate_${tag(c.W)}x${tag(c.H)}mm_chip_positions.csv`:`wafer_${tag(c.d)}mm_${l.staggered?'staggered_':''}die_positions.csv`);
+    toast(c.plate?'Chip coordinates exported as CSV.':'Die coordinates exported as CSV.');
+  }
+  function downloadCuts() {   // saw cut centre lines, measured from the plate's left and bottom edges
+    const c=lastConfig, e=c&&c.edges;
+    if(!e){toast('No chips fit, so there are no cuts to export.');return;}
+    const rows=['cut,number,position_mm,measured_from,type'];
+    const list=(dir,n,first,p,from,ends)=>{for(let k=0;k<=n;k++) rows.push([dir,k+1,(first+k*p).toFixed(6),from,k===0||k===n?`outer trim at ${ends[k?1:0]} edge`:'between chips'].join(','));};
+    list('vertical',e.nx,e.cut[0],c.px,'left edge',['left','right']);
+    list('horizontal',e.ny,e.cut[2],c.py,'bottom edge',['bottom','top']);
+    saveBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),`plate_${tag(c.W)}x${tag(c.H)}mm_cut_list.csv`);
+    toast('Cut positions exported as CSV.');
   }
   function downloadPng() {
     draw();
@@ -602,11 +701,12 @@
     out.width=canvas.width;out.height=canvas.height;
     o.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--stage-bg').trim();o.fillRect(0,0,out.width,out.height);
     o.drawImage(canvas,0,0);
-    out.toBlob(b=>{if(b)saveBlob(b,'wafer_die_map.png')},'image/png');
+    out.toBlob(b=>{if(b)saveBlob(b,lastConfig.plate?'plate_chip_map.png':'wafer_die_map.png')},'image/png');
   }
   function reset(){ids.forEach(id=>$(id).value=defaults[id]);$('flatPreset').value='none';$('majorOn').checked=$('minorOn').checked=false;place.auto=true;place.stagger=false;recalc();toast('Geometry reset to defaults.');}
   document.querySelectorAll('[data-layout]').forEach(el=>el.addEventListener('click',()=>{place.stagger=el.dataset.layout==='stagger';recalc();}));
-  ['diameter','edge','dieW','dieH','scribe'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='diameter')semiLengths();recalc();}));
+  document.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('click',()=>{place.plate=el.dataset.sub==='plate';place.auto=true;recalc();}));
+  ['diameter','plateW','plateH','edge','dieW','dieH','scribe'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='diameter')semiLengths();recalc();}));
   ['majorOn','majorLen','minorOn','minorLen','minorAngle'].forEach(id=>$(id).addEventListener('input',()=>{$('flatPreset').value='custom';recalc();}));
   ['offsetX','offsetY'].forEach(id=>$(id).addEventListener('input',()=>{place.auto=false;recalc();}));
   $('flatPreset').addEventListener('change',()=>{applyPreset($('flatPreset').value);recalc();});
@@ -616,6 +716,7 @@
   $('swapBtn').addEventListener('click',()=>{const v=$('dieW').value;$('dieW').value=$('dieH').value;$('dieH').value=v;recalc();});
   $('optimalBtn').addEventListener('click',()=>{place.auto=true;recalc();});
   $('csvBtn').addEventListener('click',downloadCsv);
+  $('cutBtn').addEventListener('click',downloadCuts);
   $('pngBtn').addEventListener('click',downloadPng);
   canvas.addEventListener('mousemove',hover);canvas.addEventListener('mouseleave',()=>tooltip.style.display='none');
   if('ResizeObserver' in window) new ResizeObserver(()=>{if(lastConfig)requestAnimationFrame(draw);}).observe(canvas);
