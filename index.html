@@ -144,7 +144,7 @@
   let lastConfig, lastLayout, drawParams, toastTimer;
   const EPS = 1e-8;      // a die counts when it lies inside the usable area to within this many mm
   const EPS_GEN = 1e-9;  // tighter tolerance for generating candidate offsets, so rounding cannot lose a die
-  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false, plate:false};
+  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false, stag:null, plate:false};
   let LO = 0, HI = 0;    // die-centre limits set by lim()
 
   function num(id, fallback, min, max) {
@@ -229,8 +229,9 @@
       x0 = Math.min(x0, ln.s); x1 = Math.max(x1, ln.s+(ln.n-1)*c.px); y0 = Math.min(y0, ln.t); y1 = Math.max(y1, ln.t);
       k = Math.min(k, ln.k0); j = Math.min(j, ln.j);
     }
-    const strip = [x0-c.w/2+c.W/2, c.W/2-x1-c.w/2, y0-c.h/2+c.H/2, c.H/2-y1-c.h/2];
-    return {strip, cut:strip.map(v => v-c.scribe/2), nx:Math.round((x1-x0)/c.px)+1, ny:Math.round((y1-y0)/c.py)+1, k, j};
+    const clean = v => Math.abs(v) < 1e-9 ? 0 : v;   // so rounding never shows -0 or a false negative cut
+    const strip = [x0-c.w/2+c.W/2, c.W/2-x1-c.w/2, y0-c.h/2+c.H/2, c.H/2-y1-c.h/2].map(clean);
+    return {strip, cut:strip.map(v => clean(v-c.scribe/2)), nx:Math.round((x1-x0)/c.px)+1, ny:Math.round((y1-y0)/c.py)+1, k, j};
   }
   function toast(s) {clearTimeout(toastTimer);$('toast').textContent=s;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2800);}
 
@@ -497,7 +498,9 @@
   }
   function semiLengths() {   // a SEMI type follows the wafer diameter
     const s = SEMI[num('diameter',200,1,1000)];
-    if (s && $('flatPreset').value in TYPES) {$('majorLen').value = s[0]; $('minorLen').value = s[1];}
+    if (!($('flatPreset').value in TYPES)) return;
+    // Without SEMI lengths for this diameter the flats keep the entered lengths, so the preset no longer applies.
+    if (s) {$('majorLen').value = s[0]; $('minorLen').value = s[1];} else $('flatPreset').value = 'custom';
   }
   function syncFlats(c) {
     $('majorLen').disabled = !$('majorOn').checked;
@@ -546,7 +549,8 @@
     else {place.ox = wrap(place.ox, c.px); place.oy = wrap(place.oy, c.py);}   // until the search finishes
     c.ox = place.ox; c.oy = place.oy; c.opt = opt;
     c.shape = region(c.R, c.cuts); c.outline = region(c.rimR, c.rim);
-    const layout = stagger ? staggered(c) : layoutFor(c), area = c.shape ? c.shape.area : 0;
+    if (stagger && !(place.stag && place.stag.key === key)) place.stag = {key, lay:staggered(c)};   // once per geometry
+    const layout = stagger ? place.stag.lay : layoutFor(c), area = c.shape ? c.shape.area : 0;
     c.edges = plate ? edgeInfo(c, layout) : null;
     lastConfig=c;lastLayout=layout;
     $('fullDies').textContent=fmt(layout.count);
@@ -647,7 +651,7 @@
     if(!l.count){ctx.textAlign='center';ctx.fillStyle=col('--empty');ctx.font=`600 ${Math.max(13,size*.025)}px Arial,sans-serif`;ctx.fillText(c.plate?'No complete chips fit':'No complete dies fit',mid,mid-10);}
     // Only worth saying when the map leaves dies out.
     $('mapStatus').hidden=stride===1;
-    $('mapStatus').textContent=`Map thinned to 1 in ${stride*stride} dies for speed; the count is exact`;
+    $('mapStatus').textContent=`Map thinned to 1 in ${stride*stride} ${c.plate?'chips':'dies'} for speed; the count is exact`;
   }
   function hover(e) {
     if(!lastConfig||!drawParams)return;
@@ -673,7 +677,7 @@
   function saveBlob(blob,name) {const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
   function downloadCsv() {
     if(!lastLayout)return;
-    if(lastLayout.count>150000){toast('CSV export is limited to 150,000 dies. Increase die size to export.');return;}
+    if(lastLayout.count>150000){{const u=lastConfig.plate?'chips':'dies';toast(`CSV export is limited to 150,000 ${u}. Increase the ${u.slice(0,-1)} size to export.`);}return;}
     const c=lastConfig,l=lastLayout,step=l.axis?c.py:c.px,e=c.edges;
     // Plates number chips from 1 at the bottom-left corner and measure from the left and bottom edges.
     const rows=[e?'column,row,x_from_left_mm,y_from_bottom_mm':(l.staggered?(l.axis?'column,die_in_column':'row,die_in_row'):'column,row')+',x_center_mm,y_center_mm'];
@@ -705,7 +709,7 @@
   }
   function reset(){ids.forEach(id=>$(id).value=defaults[id]);$('flatPreset').value='none';$('majorOn').checked=$('minorOn').checked=false;place.auto=true;place.stagger=false;recalc();toast('Geometry reset to defaults.');}
   document.querySelectorAll('[data-layout]').forEach(el=>el.addEventListener('click',()=>{place.stagger=el.dataset.layout==='stagger';recalc();}));
-  document.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('click',()=>{place.plate=el.dataset.sub==='plate';place.auto=true;recalc();}));
+  document.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('click',()=>{const p=el.dataset.sub==='plate';if(p!==place.plate){place.plate=p;place.auto=true;}recalc();}));
   ['diameter','plateW','plateH','edge','dieW','dieH','scribe'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='diameter')semiLengths();recalc();}));
   ['majorOn','majorLen','minorOn','minorLen','minorAngle'].forEach(id=>$(id).addEventListener('input',()=>{$('flatPreset').value='custom';recalc();}));
   ['offsetX','offsetY'].forEach(id=>$(id).addEventListener('input',()=>{place.auto=false;recalc();}));
