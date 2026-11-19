@@ -16,7 +16,7 @@
       --input-bg:#fff; --chip-bg:#f3f7f9; --stat-a:#fff; --stat-b:#f4f8fa; --main-a:#dff6ee; --main-b:#eef8f5; --main-border:rgba(18,160,124,.38);
       --stage-bg:#eaf0f3; --stage-glow:rgba(56,189,164,.10); --stage-grid:rgba(60,100,120,.09);
       --pop-bg:#fff; --pop-border:#b9cad2; --pop-text:#0e1f2a; --pop-shadow:rgba(16,42,58,.16); --export-bg:#f3f7f9; --export-hover:#7fa6b5; --insight-bg:rgba(255,255,255,.8);
-      --fine:#5f727c; --foot:#566a75;
+      --fine:#5f727c; --foot:#566a75; --warn-ink:#9a5208;
       /* Wafer map colors, read by the canvas renderer. */
       --wafer-a:#e4ecf1; --wafer-b:#c9d6de; --wafer-edge:#8fa9b5; --wafer-glow:rgba(16,42,58,.10); --usable:#eef3f6; --guide:rgba(70,110,128,.26);
       --die:#1fbf93; --die-edge:rgba(4,80,62,.45); --excl:#c9700f; --label:#3e5563; --axis:#6b8290; --empty:#0e1f2a; --cut:rgba(14,31,42,.26);
@@ -29,7 +29,7 @@
         --input-bg:rgba(4,16,27,.45); --chip-bg:rgba(22,45,63,.4); --stat-a:#122c3d; --stat-b:#0e2333; --main-a:#17443f; --main-b:#112c36; --main-border:rgba(86,229,184,.35);
         --stage-bg:#081b29; --stage-glow:rgba(36,79,93,.16); --stage-grid:rgba(72,114,134,.12);
         --pop-bg:#193444; --pop-border:#527c86; --pop-text:#fff; --pop-shadow:rgba(0,0,0,.28); --export-bg:#153043; --export-hover:#659caf; --insight-bg:rgba(17,39,55,.65);
-        --fine:#8ea3ae; --foot:#77919d;
+        --fine:#8ea3ae; --foot:#77919d; --warn-ink:#f4b768;
         --wafer-a:#244b60; --wafer-b:#132e41; --wafer-edge:#6ca7ac; --wafer-glow:rgba(80,224,182,.11); --usable:#102b39; --guide:rgba(118,177,190,.21);
         --die:#4cd5af; --die-edge:rgba(169,255,222,.54); --excl:#f4b768; --label:#c0d5db; --axis:#79a3b3; --empty:#e6f1ef; --cut:rgba(220,236,242,.3);
       }
@@ -48,6 +48,7 @@
     .presets{display:flex;gap:6px;margin-top:9px}.presets button{flex:1;border-radius:7px;border:1px solid var(--border);padding:7px 0;color:var(--sub);background:var(--chip-bg);font-size:12px}.presets button.active{background:var(--mint-soft);border-color:var(--mint-line);color:var(--mint-ink)}.presets button:hover{border-color:var(--mint)}
     .select{width:100%;height:41px;border:1px solid var(--border);background:var(--input-bg);color:var(--text);border-radius:9px;padding:8px 10px}
     .flat-rows{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:center;margin-top:10px}.flat-check{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:13px;font-weight:570;white-space:nowrap}.flat-check input{accent-color:var(--mint-ink);width:15px;height:15px;margin:0}.flat-check.indent{padding-left:23px}.flat-rows .input-wrap input{height:35px;padding-right:34px}.input-wrap input:disabled{opacity:.45}
+    .input-wrap input.clamped{border-color:var(--excl);box-shadow:0 0 0 1px var(--excl)}.clamp-note{margin-top:6px;font-size:11px;line-height:1.4;color:var(--warn-ink)}.flat-check.off{opacity:.45}
     .angle-row{display:flex;gap:5px;min-width:0}.angle-row .input-wrap{flex:1;min-width:0}.picks{display:flex;gap:4px}.picks button{border-radius:7px;border:1px solid var(--border);padding:0 7px;color:var(--sub);background:var(--chip-bg);font-size:11px}.picks button.active{background:var(--mint-soft);border-color:var(--mint-line);color:var(--mint-ink)}.picks button:hover{border-color:var(--mint)}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.swap{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:transparent;color:var(--sub);border-radius:8px;padding:8px 11px;margin-top:11px;font-size:12px}.swap:hover{border-color:var(--mint);color:var(--mint-ink)}
     .placement{display:flex;align-items:center;gap:9px;margin:0 0 15px;color:var(--sub);font-size:12px;line-height:1.35}.pill{flex:none;border-radius:999px;padding:3px 9px;font-size:10px;font-weight:750;letter-spacing:.08em;text-transform:uppercase;background:var(--mint-soft);color:var(--mint-ink);border:1px solid var(--mint-line)}.pill.manual{background:var(--chip-bg);color:var(--sub);border-color:var(--border)}
@@ -107,21 +108,21 @@
     <section class="right" aria-label="Calculated results and wafer map">
       <div class="stats" aria-live="polite">
         <div class="stat mainstat"><div class="label" id="countLabel">Full dies / wafer</div><div id="fullDies" class="number">—</div><div class="desc" id="fullDiesDesc">Optimal placement</div></div>
-        <div class="stat"><div class="label">Area utilization</div><div id="utilization" class="number">—</div><div class="desc">Die area / usable area</div></div>
+        <div class="stat"><div class="label">Area utilization</div><div id="utilization" class="number">—</div><div class="desc" id="utilDesc">Die area / usable area</div></div>
         <div class="stat"><div class="label" id="sizeLabel">Usable diameter</div><div id="usableDia" class="number">—</div><div class="desc">After edge exclusion</div></div>
-        <div class="stat"><div class="label">Die pitch</div><div id="diePitch" class="number">—</div><div class="desc">X × Y, with streets</div></div>
+        <div class="stat"><div class="label" id="pitchLabel">Die pitch</div><div id="diePitch" class="number">—</div><div class="desc">X × Y, with streets</div></div>
       </div>
       <div class="panel edges" id="edgePanel" hidden>
         <table><thead><tr><th>Edge distance, mm</th><th>Left</th><th>Right</th><th>Bottom</th><th>Top</th></tr></thead><tbody id="edgeRows"></tbody></table>
         <p id="cutSummary"></p>
       </div>
       <div class="panel map-card">
-        <div class="map-header"><div><h2 id="mapTitle">Wafer map</h2><p>Top view · proportional die layout</p></div><div class="legend"><span><i class="mint"></i>Full die</span><span><i class="gold"></i>Exclusion boundary</span><span id="legendCut" hidden><i class="cut"></i>Saw cut</span></div></div>
+        <div class="map-header"><div><h2 id="mapTitle">Wafer map</h2><p id="mapSub">Top view · proportional die layout</p></div><div class="legend"><span><i class="mint"></i><span id="legendDie">Full die</span></span><span><i class="gold"></i>Exclusion boundary</span><span id="legendCut" hidden><i class="cut"></i>Saw cut</span></div></div>
         <div class="canvas-outer" id="canvasOuter"><canvas id="waferCanvas" width="800" height="800" role="img" aria-label="Visualization of rectangular dies that fit completely on the usable part of the wafer or plate"></canvas><div class="hoverbox" id="hoverbox"></div></div>
         <div class="map-footer"><div class="status" id="mapStatus" hidden></div><div class="exports"><button class="export" type="button" id="pngBtn" title="Save the current wafer map as a PNG image">↓ PNG</button><button class="export" type="button" id="csvBtn" title="Export positions of all counted dies">↓ Die CSV</button><button class="export" type="button" id="cutBtn" title="Export the saw cut positions, measured from the plate edges" hidden>↓ Cut list</button></div></div>
       </div>
-      <div class="insights"><div class="insight"><div class="key">Single die area</div><div class="value" id="dieArea">—</div></div><div class="insight"><div class="key" id="usableAreaKey">Usable wafer area</div><div class="value" id="usableArea">—</div></div><div class="insight"><div class="key">Area-only estimate</div><div class="value" id="estimate">—</div></div></div>
-      <p class="fineprint">Method: a die counts when all four corners lie inside the usable area, which is the wafer outline (circle and any flats) moved inward by the edge exclusion. Dies sit on one regular grid aligned with the major flat, with straight X and Y streets running across the whole wafer, as a dicing saw cuts them. The staggered option models plasma dicing: streets run straight in one direction only and each row (or column) is placed on its own, with the shared offset chosen exactly. The optimal placement is exact rather than sampled: an optimal grid can always be slid down and then left until one die, or a pair of dies, meets the edge of the usable area. That area is convex, flats included, so checking the lowest-left position of every die pair finds an optimum, to within 10⁻⁸ mm. On a rectangular plate every row and column has the same usable length, so centred cuts already fit the most chips; its edge distances run from each plate edge to the outermost chips, and to the centre line of the outer trim cut half a street further out. The area-only estimate is usable area divided by pitch area, not an exact packing limit.</p>
+      <div class="insights"><div class="insight"><div class="key" id="dieAreaKey">Single die area</div><div class="value" id="dieArea">—</div></div><div class="insight"><div class="key" id="usableAreaKey">Usable wafer area</div><div class="value" id="usableArea">—</div></div><div class="insight"><div class="key">Area-only estimate</div><div class="value" id="estimate">—</div></div></div>
+      <p class="fineprint">Method: a die counts when all four corners lie inside the usable area, which is the wafer outline (circle and any flats) moved inward by the edge exclusion. Dies sit on one regular grid aligned with the major flat, with straight X and Y streets running across the whole wafer, as a dicing saw cuts them. The staggered option models plasma dicing: streets run straight in one direction only and each row (or column) is placed on its own, with the shared offset chosen exactly. The optimal placement is exact rather than sampled: an optimal grid can always be slid down and then left until one die, or a pair of dies, meets the edge of the usable area. That area is convex, flats included, so checking the lowest-left position of every die pair finds an optimum, to within 10⁻⁸ mm. On a rectangular plate every row and column has the same usable length, so centered cuts already fit the most chips; its edge distances run from each plate edge to the outermost chips, and to the center line of the outer trim cut half a street further out. The area-only estimate is usable area divided by pitch area, not an exact packing limit.</p>
     </section>
   </main>
   <footer class="foot"><span>Made with AI tools.</span><span>Dedicated to the public domain under <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="license">CC0 1.0</a> — do whatever you want with it.</span></footer>
@@ -144,12 +145,28 @@
   let lastConfig, lastLayout, drawParams, toastTimer;
   const EPS = 1e-8;      // a die counts when it lies inside the usable area to within this many mm
   const EPS_GEN = 1e-9;  // tighter tolerance for generating candidate offsets, so rounding cannot lose a die
-  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false, stag:null, plate:false};
-  let LO = 0, HI = 0;    // die-centre limits set by lim()
+  const place = {auto:true, ox:0, oy:0, opt:null, solving:null, progress:0, token:0, stagger:false, stag:null, saved:null, plate:false};
+  let LO = 0, HI = 0;    // die-center limits set by lim()
 
   function num(id, fallback, min, max) {
-    const raw = Number($(id).value);
-    return $(id).value.trim() && Number.isFinite(raw) ? Math.min(max,Math.max(min,raw)) : fallback;
+    const el = $(id), raw = Number(el.value), ok = el.value.trim() !== '' && Number.isFinite(raw);
+    const v = ok ? Math.min(max,Math.max(min,raw)) : fallback;
+    flag(el, ok && v !== raw, v);
+    return v;
+  }
+  // An out-of-range entry is clamped: outline the field and say under it which value is used.
+  function flag(el, on, v) {
+    el.classList.toggle('clamped', on); el.setAttribute('aria-invalid', on);
+    const field = el.closest('.field'); if (!field) return;
+    let note = field.querySelector(`.clamp-note[data-for="${el.id}"]`);
+    if (on && !note) {note = document.createElement('div'); note.className = 'clamp-note'; note.dataset.for = el.id; field.appendChild(note);}
+    if (!note) return;
+    note.hidden = !on;
+    if (on) {
+      const label = document.querySelector(`label[for="${el.id}"]`), unit = el.parentElement.querySelector('.unit');
+      const name = el.getAttribute('aria-label') || (label ? label.firstChild.textContent.trim() : 'Value'), u = unit ? unit.textContent : '';
+      note.textContent = `${name} out of range, using ${fmt3(v)}${u === '°' ? '°' : ' '+u}`;
+    }
   }
   const wrap = (v, p) => v-Math.round(v/p)*p;
   function getConfig() {
@@ -166,7 +183,7 @@
     }
     const d = num('diameter',200,1,1000);
     const edge = num('edge',3,0,d/2);
-    // Flats as outward unit normals and distances from the wafer centre; the major flat faces down.
+    // Flats as outward unit normals and distances from the wafer center; the major flat faces down.
     const rim = [], dist = len => Math.sqrt(d*d/4-len*len/4), snap = v => Math.abs(v) < 1e-12 ? 0 : v;
     if ($('majorOn').checked) rim.push({nx:0, ny:-1, d:dist(num('majorLen',32.5,0,.98*d))});
     if ($('minorOn').checked) {
@@ -178,7 +195,7 @@
     return {plate:false, d, edge, w, h, scribe, px, py, R:Math.max(0,d/2-edge), rimR:d/2, rim, cuts};
   }
 
-  // Die-centre limits along one grid line: a row at height t (axis 0) or a column at x = t (axis 1).
+  // Die-center limits along one grid line: a row at height t (axis 0) or a column at x = t (axis 1).
   // Sets [LO, HI]; returns false when the circle, or a flat parallel to the line, excludes the whole line.
   function lim(c, t, axis, tol) {
     const a = axis ? c.h : c.w, b = axis ? c.w : c.h, far = Math.abs(t)+b/2;
@@ -195,7 +212,7 @@
     return true;
   }
 
-  // Exact count for a fixed grid: in each row the valid die centres form a single interval.
+  // Exact count for a fixed grid: in each row the valid die centers form a single interval.
   function countAt(c, ox, oy, rows) {
     const top = c.R-c.h/2+EPS;
     let count = 0;
@@ -207,20 +224,20 @@
     }
     return count;
   }
-  // A layout is a list of lines: rows, or columns when axis is 1. Line j at position t holds n dies centred at
+  // A layout is a list of lines: rows, or columns when axis is 1. Line j at position t holds n dies centered at
   // s, s+pitch, ... along it; k0 is the grid column of its first die (0 for staggered lines).
   function layoutFor(c) { const lines = []; return {count:countAt(c, c.ox, c.oy, lines), axis:0, staggered:false, lines}; }
 
   // Plate: every row and every column has the same usable length, so the most chips a row can hold,
-  // floor((usable - chip)/pitch) + 1, is reached at any offset that keeps them inside. Centring the block
+  // floor((usable - chip)/pitch) + 1, is reached at any offset that keeps them inside. Centering the block
   // reaches it and leaves equal edge strips on opposite sides, so no search is needed.
-  function centred(c) {
+  function centered(c) {
     const fit = (len, size, p) => len < size-2*EPS ? 0 : Math.floor((len-size+2*EPS)/p)+1;
     const nx = fit(c.W-2*c.edge, c.w, c.px), ny = fit(c.H-2*c.edge, c.h, c.py);
     return {count:nx*ny, ox:nx ? wrap(-(nx-1)*c.px/2, c.px) : 0, oy:ny ? wrap(-(ny-1)*c.py/2, c.py) : 0};
   }
   // Plate edges from the chips actually placed: the strip from each plate edge to the outermost chips
-  // (left, right, bottom, top) and the centre line of each outer trim cut, half a street further out.
+  // (left, right, bottom, top) and the center line of each outer trim cut, half a street further out.
   // k and j are the grid indices of the bottom-left chip, used to number chips from that corner.
   function edgeInfo(c, l) {
     if (!l.count) return null;
@@ -256,7 +273,7 @@
   }
   const lastFeasible = (f, a, b) => -firstFeasible(y => f(-y), -b, -a);
 
-  // Heights at which a die centre fits somewhere in its row, as [low, high] (generator tolerance), or null.
+  // Heights at which a die center fits somewhere in its row, as [low, high] (generator tolerance), or null.
   function heights(c) {
     let a = -(c.R-c.h/2), b = c.R-c.h/2;
     for (const f of c.cuts) if (f.nx === 0) {   // flats parallel to the rows bound the height directly (|ny| = 1)
@@ -341,8 +358,8 @@
      street spacing cannot beat this grid. The staggered option for plasma dicing, where each row or column slides
      on its own, is solved separately by staggerAlong() below.
      A rectangular plate is four straight cuts with the circle moved outside its corners. All its rows and columns
-     have the same usable length, so centred cuts already fit the most chips and this search is not run; see centred(). */
-  function* optimise(c) {
+     have the same usable length, so centered cuts already fit the most chips and this search is not run; see centered(). */
+  function* optimize(c) {
     const best = {count:-1, ox:0, oy:0, tried:0};
     const take = (ox, oy) => {
       ox = wrap(ox, c.px); oy = wrap(oy, c.py); best.tried++;
@@ -369,7 +386,7 @@
         }
       }
     }
-    // Centre the grid inside its optimal window where there is one, keeping the count.
+    // Center the grid inside its optimal window where there is one, keeping the count.
     for (let i = 0; i < 2 && best.count > 0; i++) {
       const ox = bestAlong(c, best.oy, 0).at, nx = countAt(c, ox, best.oy);
       if (nx >= best.count) {best.count = nx; best.ox = ox;}
@@ -379,13 +396,17 @@
     return best;
   }
   function solve(c, key) {   // runs the search in short slices so large layouts keep the page responsive
-    const token = ++place.token, it = optimise(c);
-    place.solving = key; place.progress = 0;
+    const token = ++place.token, it = optimize(c);
+    place.solving = key; place.progress = 0; showPlacement();
     (function step() {
       if (token !== place.token) return;
       const t0 = performance.now(); let r;
       do r = it.next(); while (!r.done && performance.now()-t0 < 15);
-      if (!r.done) {place.progress = r.value; showPlacement(); setTimeout(step, 0); return;}
+      if (!r.done) {   // report progress in 10 % steps, so the live status is not re-read every few milliseconds
+        const pct = Math.floor(10*r.value)*10;
+        if (pct !== place.progress) {place.progress = pct; showPlacement();}
+        setTimeout(step, 0); return;
+      }
       place.solving = null; place.opt = {key, ...r.value};
       recalc();
     })();
@@ -412,7 +433,7 @@
         if (!lim(c, t, axis, EPS) || HI-LO < -2*EPS) continue;
         const k = Math.floor((HI-LO+2*EPS)/p)+1;
         n += k;
-        if (lines) lines.push({j, t, s:(LO+HI-(k-1)*p)/2, n:k, k0:0});   // centred in the usable stretch
+        if (lines) lines.push({j, t, s:(LO+HI-(k-1)*p)/2, n:k, k0:0});   // centered in the usable stretch
       }
       return n;
     };
@@ -505,6 +526,9 @@
   function syncFlats(c) {
     $('majorLen').disabled = !$('majorOn').checked;
     $('minorLen').disabled = $('minorAngle').disabled = !$('minorOn').checked;
+    document.querySelector('label[for="minorAngle"]').classList.toggle('off', !$('minorOn').checked);
+    if (!$('majorOn').checked) flag($('majorLen'), false);   // a flat that is off is not read, so clear its warning
+    if (!$('minorOn').checked) {flag($('minorLen'), false); flag($('minorAngle'), false);}
     document.querySelectorAll('[data-angle]').forEach(el=>el.classList.toggle('active', $('minorOn').checked && Number(el.dataset.angle)===num('minorAngle',90,-360,360)));
     const s = SEMI[c.d];
     $('flatNote').textContent = (s ? `SEMI M1 at ${fmt(c.d)} mm: major ${fmt(s[0])} mm, minor ${fmt(s[1])} mm. ` : 'SEMI M1 gives flats for 2″, 3″, 100, 125 and 150 mm wafers; larger wafers use a notch. ')
@@ -514,36 +538,37 @@
     const c = lastConfig, l = lastLayout, opt = c.opt, manual = !place.auto && !l.staggered, lines = l.axis ? 'columns' : 'rows';
     if (c.plate) {
       const e = c.edges;
-      $('placeMode').textContent = manual ? 'Manual' : 'Centred';
+      $('placeMode').textContent = manual ? 'Manual' : 'Centered';
       $('placeMode').classList.toggle('manual', manual);
       $('placeText').textContent = !manual ? 'Equal edge strips on opposite sides, and the most chips possible'
-        : opt.count > l.count ? `Centred cuts give ${fmt(opt.count)} chips, ${fmt(opt.count-l.count)} more` : 'Same chip count as centred cuts';
-      $('fullDiesDesc').textContent = (e ? `${e.nx} × ${e.ny} chips` : 'No chips') + (manual ? ', manual offset' : ', centred');
+        : opt.count > l.count ? `Centered cuts give ${fmt(opt.count)} chips, ${fmt(opt.count-l.count)} more` : 'Same chip count as centered cuts';
+      $('fullDiesDesc').textContent = (e ? `${e.nx} × ${e.ny} chips` : 'No chips') + (manual ? ', manual offset' : ', centered');
       $('optimalBtn').disabled = !manual;
-      $('optimalBtn').textContent = manual ? 'Centre the cuts' : '✓ Centred cuts';
-      $('placeHelp').textContent = 'Centred cuts leave equal edge strips on opposite sides and already fit the most chips. Moving a slider shifts the cuts; chips that would cross the edge exclusion are dropped.';
+      $('optimalBtn').textContent = manual ? 'Center the cuts' : '✓ Centered cuts';
+      $('placeHelp').textContent = 'Centered cuts leave equal edge strips on opposite sides and already fit the most chips. Moving a slider shifts the cuts; chips that would cross the edge exclusion are dropped.';
       return;
     }
     $('placeMode').textContent = manual ? 'Manual' : opt || l.staggered ? 'Optimal' : 'Searching';
     $('placeMode').classList.toggle('manual', manual);
     $('placeText').textContent = l.staggered ? `Staggered ${lines}, exact maximum` + (!opt ? '' : l.count > opt.count ? `: ${fmt(l.count-opt.count)} more than the best grid` : ': same as the best grid')
-      : !opt ? `Finding the exact optimum… ${Math.round(100*place.progress)}%`
+      : !opt ? `Finding the exact optimum… ${place.progress}%`
       : !manual ? `Exact maximum, from ${fmt(opt.tried)} candidate offsets`
       : opt.count > l.count ? `The optimum is ${fmt(opt.count)} dies, ${fmt(opt.count-l.count)} more` : 'This offset is also optimal';
     $('fullDiesDesc').textContent = l.staggered ? `Staggered ${lines}` : manual ? 'Manual offset' : opt ? 'Optimal placement' : 'Optimizing…';
     $('optimalBtn').disabled = !manual;
     $('optimalBtn').textContent = manual ? 'Use optimal placement' : '✓ Optimal placement';
     $('placeHelp').textContent = l.staggered
-      ? 'Plasma dicing: streets run straight in one direction only, and each row or column of dies is placed on its own, so every one holds as many dies as fit. Rows or columns are used, whichever fits more, and their shared offset is optimised exactly.'
+      ? 'Plasma dicing: streets run straight in one direction only, and each row or column of dies is placed on its own, so every one holds as many dies as fit. Rows or columns are used, whichever fits more, and their shared offset is optimized exactly.'
       : 'The optimum is exact, not sampled: every grid position where a pair of dies touches the usable edge is checked. Moving a slider switches to manual placement.';
   }
 
   function recalc() {
     const c = getConfig(), plate = c.plate, stagger = place.stagger && !plate;
+    if (!stagger && place.saved) {[$('offsetX').value, $('offsetY').value] = place.saved; place.saved = null;}   // back from staggered
     const key = JSON.stringify([plate, c.d, c.edge, c.w, c.h, c.scribe, c.cuts]);
-    const opt = plate ? {key, ...centred(c)} : place.opt && place.opt.key === key ? place.opt : null;
+    const opt = plate ? {key, ...centered(c)} : place.opt && place.opt.key === key ? place.opt : null;
     if (opt && place.solving) {place.token++; place.solving = null;}   // an older search is no longer needed
-    const base = plate ? opt : {ox:0, oy:0};   // on a plate the sliders shift the cuts away from centred
+    const base = plate ? opt : {ox:0, oy:0};   // on a plate the sliders shift the cuts away from centered
     if (!place.auto) {place.ox = base.ox+c.px*num('offsetX',0,-50,50)/100; place.oy = base.oy+c.py*num('offsetY',0,-50,50)/100;}
     else if (opt) {place.ox = opt.ox; place.oy = opt.oy;}
     else {place.ox = wrap(place.ox, c.px); place.oy = wrap(place.oy, c.py);}   // until the search finishes
@@ -555,14 +580,17 @@
     lastConfig=c;lastLayout=layout;
     $('fullDies').textContent=fmt(layout.count);
     $('utilization').textContent=fmt(area?layout.count*c.w*c.h/area*100:0)+'%';
-    $('usableDia').textContent=plate?fmt3(Math.max(0,c.W-2*c.edge))+' × '+fmt3(Math.max(0,c.H-2*c.edge)):fmt3(c.R*2)+' mm';
-    $('usableDia').style.fontSize=$('usableDia').textContent.length>11?'19px':'';
+    $('usableDia').textContent=(plate?fmt3(Math.max(0,c.W-2*c.edge))+' × '+fmt3(Math.max(0,c.H-2*c.edge)):fmt3(c.R*2))+' mm';
     $('diePitch').textContent=fmt3(c.px)+' × '+fmt3(c.py);
-    $('diePitch').style.fontSize=(c.px>99||c.py>99)?'19px':'';
     $('dieArea').innerHTML=fmt3(c.w*c.h)+' <small>mm²</small>';
     $('usableArea').innerHTML=fmt(area)+' <small>mm²</small>';
     $('estimate').innerHTML=fmt(Math.floor(area/(c.px*c.py)))+(plate?' <small>chips</small>':' <small>dies</small>');
-    if (place.auto && !stagger) {$('offsetX').value=(100*(c.ox-base.ox)/c.px).toFixed(1); $('offsetY').value=(100*(c.oy-base.oy)/c.py).toFixed(1);}
+    if (stagger) {   // the slider across the staggered lines shows their shared offset; the other one has no meaning
+      if (!place.saved) place.saved = [$('offsetX').value, $('offsetY').value];
+      const pct = (100*layout.o/(layout.axis ? c.px : c.py)).toFixed(1);
+      $('offsetX').value = layout.axis ? pct : 0; $('offsetY').value = layout.axis ? 0 : pct;
+    }
+    else if (place.auto) {$('offsetX').value=(100*(c.ox-base.ox)/c.px).toFixed(1); $('offsetY').value=(100*(c.oy-base.oy)/c.py).toFixed(1);}
     $('offsetX').disabled = $('offsetY').disabled = stagger;   // staggered lines each have their own offset
     const off = v => Math.abs(v) < 5e-4 ? '0 mm' : (v>0?'+':'')+fmt3(v)+' mm';
     $('offsetXval').textContent=!layout.staggered?off(c.ox-base.ox):layout.axis?off(layout.o):'per row';
@@ -583,10 +611,25 @@
     $('usableAreaKey').textContent = plate ? 'Usable plate area' : 'Usable wafer area';
     $('mapTitle').textContent = plate ? 'Plate map' : 'Wafer map';
     $('csvBtn').textContent = plate ? '↓ Chip CSV' : '↓ Die CSV';
+    const unit = plate ? 'chip' : 'die';
+    $('legendDie').textContent = `Full ${unit}`;
+    $('mapSub').textContent = `Top view · proportional ${unit} layout`;
+    $('dieAreaKey').textContent = `Single ${unit} area`;
+    $('pitchLabel').textContent = plate ? 'Chip pitch' : 'Die pitch';
+    $('utilDesc').textContent = plate ? 'Chip area / usable area' : 'Die area / usable area';
+    $('swapBtn').textContent = `⇄  Swap ${unit} orientation`; $('swapBtn').title = `Rotate all ${unit}s 90 degrees`;
     if (plate) showEdges(c); else syncFlats(c);
     showPlacement();
+    fitStats();
     requestAnimationFrame(draw);
     if (!opt && place.solving !== key) solve(c, key);
+  }
+  // Shrink any stat figure that is wider than its card, so long values never spill out of it.
+  function fitStats() {
+    for (const el of document.querySelectorAll('.stat .number')) {
+      el.style.fontSize = '';
+      for (let f = parseFloat(getComputedStyle(el).fontSize); el.scrollWidth > el.clientWidth && f > 12; ) el.style.fontSize = (--f)+'px';
+    }
   }
   function showEdges(c) {   // the plate's edge table and a summary of the cuts for the saw
     const e = c.edges, row = (name, v) => `<tr><th>${name}</th>${v.map(x => `<td>${e ? fmt3(x) : '—'}</td>`).join('')}</tr>`;
@@ -595,7 +638,7 @@
       : `Vertical cuts: ${e.nx+1}, the first ${fmt3(e.cut[0])} mm from the left edge, then every ${fmt3(c.px)} mm. `
       + `Horizontal cuts: ${e.ny+1}, the first ${fmt3(e.cut[2])} mm from the bottom edge, then every ${fmt3(c.py)} mm. `
       + 'Both counts include the two outer cuts that trim off the edge strips.'
-      + (e.cut.some(v => v < 0) ? ' A negative first cut puts the blade centre outside the plate edge.' : '');
+      + (e.cut.some(v => v < 0) ? ' A negative first cut puts the blade center outside the plate edge.' : '');
   }
   function draw() {
     if(!lastConfig)return;
@@ -688,7 +731,7 @@
     saveBlob(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}),c.plate?`plate_${tag(c.W)}x${tag(c.H)}mm_chip_positions.csv`:`wafer_${tag(c.d)}mm_${l.staggered?'staggered_':''}die_positions.csv`);
     toast(c.plate?'Chip coordinates exported as CSV.':'Die coordinates exported as CSV.');
   }
-  function downloadCuts() {   // saw cut centre lines, measured from the plate's left and bottom edges
+  function downloadCuts() {   // saw cut center lines, measured from the plate's left and bottom edges
     const c=lastConfig, e=c&&c.edges;
     if(!e){toast('No chips fit, so there are no cuts to export.');return;}
     const rows=['cut,number,position_mm,measured_from,type'];
@@ -707,7 +750,7 @@
     o.drawImage(canvas,0,0);
     out.toBlob(b=>{if(b)saveBlob(b,lastConfig.plate?'plate_chip_map.png':'wafer_die_map.png')},'image/png');
   }
-  function reset(){ids.forEach(id=>$(id).value=defaults[id]);$('flatPreset').value='none';$('majorOn').checked=$('minorOn').checked=false;place.auto=true;place.stagger=false;recalc();toast('Geometry reset to defaults.');}
+  function reset(){ids.forEach(id=>$(id).value=defaults[id]);$('flatPreset').value='none';$('majorOn').checked=$('minorOn').checked=false;place.auto=true;place.stagger=false;place.saved=null;recalc();toast('Geometry reset to defaults.');}
   document.querySelectorAll('[data-layout]').forEach(el=>el.addEventListener('click',()=>{place.stagger=el.dataset.layout==='stagger';recalc();}));
   document.querySelectorAll('[data-sub]').forEach(el=>el.addEventListener('click',()=>{const p=el.dataset.sub==='plate';if(p!==place.plate){place.plate=p;place.auto=true;}recalc();}));
   ['diameter','plateW','plateH','edge','dieW','dieH','scribe'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='diameter')semiLengths();recalc();}));
@@ -725,6 +768,9 @@
   canvas.addEventListener('mousemove',hover);canvas.addEventListener('mouseleave',()=>tooltip.style.display='none');
   if('ResizeObserver' in window) new ResizeObserver(()=>{if(lastConfig)requestAnimationFrame(draw);}).observe(canvas);
   else window.addEventListener('resize',draw);
+  let statsWidth = 0;   // refit the stat figures whenever the cards change width
+  if('ResizeObserver' in window) new ResizeObserver(e=>{const w=e[0].contentRect.width;if(w!==statsWidth){statsWidth=w;fitStats();}}).observe(document.querySelector('.stats'));
+  else window.addEventListener('resize',fitStats);
   // Redraw the canvas when the system switches between light and dark.
   if(window.matchMedia){const scheme=matchMedia('(prefers-color-scheme: dark)'),redraw=()=>requestAnimationFrame(draw);scheme.addEventListener?scheme.addEventListener('change',redraw):scheme.addListener(redraw);}
   recalc();
